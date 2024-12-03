@@ -9,6 +9,96 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      event_service_requests: {
+        Row: {
+          created_at: string
+          event_id: string
+          hours_needed: number
+          id: string
+          provider_id: string | null
+          rate_agreed: number | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status: Database["public"]["Enums"]["event_status"] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          hours_needed: number
+          id?: string
+          provider_id?: string | null
+          rate_agreed?: number | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["event_status"] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          hours_needed?: number
+          id?: string
+          provider_id?: string | null
+          rate_agreed?: number | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["event_status"] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_service_requests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_service_requests_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          budget_range: string | null
+          client_id: string
+          created_at: string
+          event_date: string
+          guest_count: number
+          id: string
+          location: string
+          special_requirements: string | null
+          status: Database["public"]["Enums"]["event_status"] | null
+          updated_at: string
+        }
+        Insert: {
+          budget_range?: string | null
+          client_id: string
+          created_at?: string
+          event_date: string
+          guest_count: number
+          id?: string
+          location: string
+          special_requirements?: string | null
+          status?: Database["public"]["Enums"]["event_status"] | null
+          updated_at?: string
+        }
+        Update: {
+          budget_range?: string | null
+          client_id?: string
+          created_at?: string
+          event_date?: string
+          guest_count?: number
+          id?: string
+          location?: string
+          special_requirements?: string | null
+          status?: Database["public"]["Enums"]["event_status"] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -33,6 +123,96 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          client_id: string
+          comment: string | null
+          created_at: string
+          event_id: string
+          id: string
+          provider_id: string
+          rating: number
+        }
+        Insert: {
+          client_id: string
+          comment?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          provider_id: string
+          rating: number
+        }
+        Update: {
+          client_id?: string
+          comment?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          provider_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_providers: {
+        Row: {
+          business_name: string | null
+          certifications: string[] | null
+          created_at: string
+          description: string | null
+          hourly_rate: number | null
+          id: string
+          rating: number | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status: Database["public"]["Enums"]["provider_status"] | null
+          updated_at: string
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          business_name?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          description?: string | null
+          hourly_rate?: number | null
+          id?: string
+          rating?: number | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["provider_status"] | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          business_name?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          description?: string | null
+          hourly_rate?: number | null
+          id?: string
+          rating?: number | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["provider_status"] | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -41,7 +221,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      event_status: "pending" | "confirmed" | "completed" | "cancelled"
+      provider_status: "available" | "busy" | "inactive"
+      service_type: "bartender" | "chef" | "server"
     }
     CompositeTypes: {
       [_ in never]: never

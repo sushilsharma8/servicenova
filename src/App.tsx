@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import SuccessPage from "./components/SuccessPage";
+import ServiceProviderProfile from "./pages/ServiceProviderProfile";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <SuccessPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/provider-profile"
+            element={
+              <ProtectedRoute>
+                <ServiceProviderProfile />
               </ProtectedRoute>
             }
           />
