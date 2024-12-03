@@ -34,15 +34,17 @@ const ServiceProviderProfile = () => {
         .from("service_providers")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle(); // Changed from .single() to .maybeSingle()
 
       if (error) throw error;
 
       if (data) {
         setProfile(data);
       }
+      // If no data is found, we'll use the default state values
     } catch (error) {
       console.error("Error fetching profile:", error);
+      toast.error("Failed to load profile");
     } finally {
       setLoading(false);
     }
