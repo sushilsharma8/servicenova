@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { PersonalDetailsSection } from "@/components/provider-application/PersonalDetailsSection";
+import { ProfessionalDetailsSection } from "@/components/provider-application/ProfessionalDetailsSection";
+import { DocumentUploadSection } from "@/components/provider-application/DocumentUploadSection";
+import { Database } from "@/integrations/supabase/types";
+
+type ServiceType = Database["public"]["Enums"]["service_type"];
 
 const ProviderApplication = () => {
   const navigate = useNavigate();
@@ -14,7 +19,7 @@ const ProviderApplication = () => {
     fullName: "",
     address: "",
     age: "",
-    serviceType: "bartender",
+    serviceType: "bartender" as ServiceType,
     yearsExperience: "",
     certifications: "",
     identityProof: null as File | null,
@@ -22,13 +27,15 @@ const ProviderApplication = () => {
     preferredInterviewDate: "",
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'identity' | 'experience') => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({
-        ...prev,
-        [type === 'identity' ? 'identityProof' : 'experienceProof']: e.target.files![0]
-      }));
-    }
+  const handleChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (type: 'identity' | 'experience', file: File) => {
+    setFormData(prev => ({
+      ...prev,
+      [type === 'identity' ? 'identityProof' : 'experienceProof']: file
+    }));
   };
 
   const uploadFile = async (file: File, type: string) => {
@@ -98,108 +105,31 @@ const ProviderApplication = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              value={formData.fullName}
-              onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-              required
-            />
-          </div>
+        <PersonalDetailsSection
+          fullName={formData.fullName}
+          address={formData.address}
+          age={formData.age}
+          onChange={handleChange}
+        />
 
-          <div>
-            <Label htmlFor="address">Address</Label>
-            <Textarea
-              id="address"
-              value={formData.address}
-              onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-              required
-            />
-          </div>
+        <ProfessionalDetailsSection
+          serviceType={formData.serviceType}
+          yearsExperience={formData.yearsExperience}
+          certifications={formData.certifications}
+          onChange={handleChange}
+        />
 
-          <div>
-            <Label htmlFor="age">Age</Label>
-            <Input
-              id="age"
-              type="number"
-              min="18"
-              value={formData.age}
-              onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-              required
-            />
-          </div>
+        <DocumentUploadSection onFileChange={handleFileChange} />
 
-          <div>
-            <Label htmlFor="serviceType">Service Type</Label>
-            <select
-              id="serviceType"
-              className="w-full p-2 border rounded-md"
-              value={formData.serviceType}
-              onChange={(e) => setFormData(prev => ({ ...prev, serviceType: e.target.value }))}
-              required
-            >
-              <option value="bartender">Bartender</option>
-              <option value="chef">Chef</option>
-              <option value="server">Server</option>
-            </select>
-          </div>
-
-          <div>
-            <Label htmlFor="yearsExperience">Years of Experience</Label>
-            <Input
-              id="yearsExperience"
-              type="number"
-              min="0"
-              value={formData.yearsExperience}
-              onChange={(e) => setFormData(prev => ({ ...prev, yearsExperience: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="certifications">Certifications (comma-separated)</Label>
-            <Input
-              id="certifications"
-              value={formData.certifications}
-              onChange={(e) => setFormData(prev => ({ ...prev, certifications: e.target.value }))}
-              placeholder="e.g., Food Safety, Bartending License"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="identityProof">Identity Proof (Aadhar/PAN)</Label>
-            <Input
-              id="identityProof"
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => handleFileChange(e, 'identity')}
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="experienceProof">Experience Proof</Label>
-            <Input
-              id="experienceProof"
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => handleFileChange(e, 'experience')}
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="preferredInterviewDate">Preferred Interview Date</Label>
-            <Input
-              id="preferredInterviewDate"
-              type="datetime-local"
-              value={formData.preferredInterviewDate}
-              onChange={(e) => setFormData(prev => ({ ...prev, preferredInterviewDate: e.target.value }))}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="preferredInterviewDate">Preferred Interview Date</Label>
+          <Input
+            id="preferredInterviewDate"
+            type="datetime-local"
+            value={formData.preferredInterviewDate}
+            onChange={(e) => handleChange("preferredInterviewDate", e.target.value)}
+            required
+          />
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
