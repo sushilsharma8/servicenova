@@ -123,6 +123,69 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_applications: {
+        Row: {
+          address: string
+          admin_notes: string | null
+          age: number
+          certifications: string[] | null
+          created_at: string
+          experience_proof_url: string | null
+          full_name: string
+          id: string
+          identity_proof_url: string | null
+          interview_link: string | null
+          preferred_interview_date: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status:
+            | Database["public"]["Enums"]["provider_application_status"]
+            | null
+          updated_at: string
+          user_id: string
+          years_experience: number
+        }
+        Insert: {
+          address: string
+          admin_notes?: string | null
+          age: number
+          certifications?: string[] | null
+          created_at?: string
+          experience_proof_url?: string | null
+          full_name: string
+          id?: string
+          identity_proof_url?: string | null
+          interview_link?: string | null
+          preferred_interview_date?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?:
+            | Database["public"]["Enums"]["provider_application_status"]
+            | null
+          updated_at?: string
+          user_id: string
+          years_experience: number
+        }
+        Update: {
+          address?: string
+          admin_notes?: string | null
+          age?: number
+          certifications?: string[] | null
+          created_at?: string
+          experience_proof_url?: string | null
+          full_name?: string
+          id?: string
+          identity_proof_url?: string | null
+          interview_link?: string | null
+          preferred_interview_date?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?:
+            | Database["public"]["Enums"]["provider_application_status"]
+            | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           client_id: string
@@ -222,6 +285,11 @@ export type Database = {
     }
     Enums: {
       event_status: "pending" | "confirmed" | "completed" | "cancelled"
+      provider_application_status:
+        | "pending"
+        | "interview_scheduled"
+        | "approved"
+        | "rejected"
       provider_status: "available" | "busy" | "inactive"
       service_type: "bartender" | "chef" | "server"
     }

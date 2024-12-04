@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import SuccessPage from "./components/SuccessPage";
 import ServiceProviderProfile from "./pages/ServiceProviderProfile";
 import CreateEvent from "./pages/CreateEvent";
+import ProviderApplication from "./pages/ProviderApplication";
+import ApplicationSuccess from "./pages/ApplicationSuccess";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +84,22 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <CreateEvent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/provider-application"
+            element={
+              <ProtectedRoute>
+                <ProviderApplication />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/application-success"
+            element={
+              <ProtectedRoute>
+                <ApplicationSuccess />
               </ProtectedRoute>
             }
           />
