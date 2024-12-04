@@ -75,7 +75,7 @@ const AdminReview = () => {
               <TableCell>{application.years_experience} years</TableCell>
               <TableCell>
                 <Badge variant={application.status === "pending" ? "secondary" : 
-                            application.status === "approved" ? "success" : 
+                            application.status === "approved" ? "outline" : 
                             application.status === "rejected" ? "destructive" : 
                             "default"}>
                   {application.status}
