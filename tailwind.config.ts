@@ -20,14 +20,15 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1A365D",
+          DEFAULT: "#1A1A1A",
           foreground: "#FFFFFF",
         },
         accent: {
-          DEFAULT: "#ED8936",
-          foreground: "#FFFFFF",
+          DEFAULT: "#9EFF00",
+          foreground: "#000000",
         },
-        background: "#F7FAFC",
+        background: "#000000",
+        card: "#1A1A1A",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

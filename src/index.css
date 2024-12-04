@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-background font-sans;
+  @apply bg-background font-sans text-white;
 }
 
 .form-step {
@@ -18,7 +18,7 @@ body {
 }
 
 .progress-bar {
-  @apply h-2 bg-gray-200 rounded-full overflow-hidden;
+  @apply h-2 bg-gray-800 rounded-full overflow-hidden;
 }
 
 .progress-bar-fill {
