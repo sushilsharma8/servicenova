@@ -1,1 +1,4 @@
 project_id = "xwvegdqetuldzcpplkjx"
+
+[functions.send-interview-email]
+verify_jwt = true

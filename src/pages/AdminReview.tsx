@@ -16,7 +16,7 @@ import { Database } from "@/integrations/supabase/types";
 type ProviderApplication = Database["public"]["Tables"]["provider_applications"]["Row"];
 
 const AdminReview = () => {
-  const { data: applications, isLoading } = useQuery({
+  const { data: applications, isLoading, refetch } = useQuery({
     queryKey: ["provider-applications"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -35,17 +35,51 @@ const AdminReview = () => {
     interviewLink?: string
   ) => {
     try {
-      const { error } = await supabase
+      // Generate a Google Meet link (in a real application, this would integrate with Google Calendar API)
+      const meetLink = "https://meet.google.com/" + Math.random().toString(36).substring(2, 15);
+
+      const { data: application, error: fetchError } = await supabase
+        .from("provider_applications")
+        .select("*")
+        .eq("id", applicationId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      const { error: updateError } = await supabase
         .from("provider_applications")
         .update({
           status: newStatus,
-          interview_link: interviewLink,
+          interview_link: meetLink,
         })
         .eq("id", applicationId);
 
-      if (error) throw error;
-      toast.success(`Application ${newStatus} successfully`);
+      if (updateError) throw updateError;
+
+      if (newStatus === "interview_scheduled") {
+        // Send interview notification email
+        const { error: emailError } = await supabase.functions.invoke("send-interview-email", {
+          body: {
+            to: application.email || "applicant@example.com", // You'll need to add email field to your applications table
+            applicantName: application.full_name,
+            interviewDate: application.preferred_interview_date,
+            meetingLink: meetLink,
+          },
+        });
+
+        if (emailError) {
+          console.error("Error sending email:", emailError);
+          toast.error("Interview scheduled but failed to send email notification");
+        } else {
+          toast.success("Interview scheduled and email notification sent");
+        }
+      } else {
+        toast.success(`Application ${newStatus} successfully`);
+      }
+
+      refetch();
     } catch (error) {
+      console.error("Error:", error);
       toast.error("Failed to update application status");
     }
   };
@@ -109,7 +143,7 @@ const AdminReview = () => {
                     <>
                       <Button
                         size="sm"
-                        onClick={() => handleUpdateStatus(application.id, "interview_scheduled", "https://meet.google.com/xyz")}
+                        onClick={() => handleUpdateStatus(application.id, "interview_scheduled")}
                       >
                         Schedule Interview
                       </Button>
