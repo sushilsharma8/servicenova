@@ -130,6 +130,7 @@ export type Database = {
           age: number
           certifications: string[] | null
           created_at: string
+          email: string | null
           experience_proof_url: string | null
           full_name: string
           id: string
@@ -150,6 +151,7 @@ export type Database = {
           age: number
           certifications?: string[] | null
           created_at?: string
+          email?: string | null
           experience_proof_url?: string | null
           full_name: string
           id?: string
@@ -170,6 +172,7 @@ export type Database = {
           age?: number
           certifications?: string[] | null
           created_at?: string
+          email?: string | null
           experience_proof_url?: string | null
           full_name?: string
           id?: string

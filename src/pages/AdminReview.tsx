@@ -60,7 +60,7 @@ const AdminReview = () => {
         // Send interview notification email
         const { error: emailError } = await supabase.functions.invoke("send-interview-email", {
           body: {
-            to: application.email || "applicant@example.com", // You'll need to add email field to your applications table
+            to: application.email || "applicant@example.com",
             applicantName: application.full_name,
             interviewDate: application.preferred_interview_date,
             meetingLink: meetLink,

@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Eventful Bites Connect <onboarding@resend.dev>',
+        from: 'onboarding@resend.dev',
         to: [to],
         subject: 'Interview Scheduled - Eventful Bites Connect',
         html: emailHtml,
