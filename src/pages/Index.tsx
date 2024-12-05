@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import WineGlass from "@/components/WineGlass";
 
 const FeatureItem = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
   <div className="flex gap-3 items-start">
@@ -35,6 +36,7 @@ const Index = () => {
           <h1 className="text-4xl font-bold">
             Elevate Your Event
           </h1>
+          <WineGlass />
           <p className="text-2xl font-semibold">
             <span className="text-accent">Professional Staff,</span><br />
             <span className="text-accent">Exceptional Service</span>
