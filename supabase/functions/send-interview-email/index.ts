@@ -61,7 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'onboarding@resend.dev',
+        from: 'Eventful Bites Connect <onboarding@resend.dev>',
         to: [to],
         subject: 'Interview Scheduled - Eventful Bites Connect',
         html: emailHtml,
@@ -80,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in send-interview-email function:', error)
     return new Response(
       JSON.stringify({ 
