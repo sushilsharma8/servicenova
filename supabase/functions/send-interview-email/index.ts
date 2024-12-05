@@ -21,7 +21,21 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Check if RESEND_API_KEY is configured
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is not configured')
+      throw new Error('Email service is not configured')
+    }
+
     const { to, applicantName, interviewDate, meetingLink }: EmailRequest = await req.json()
+    
+    // Validate required fields
+    if (!to || !applicantName || !interviewDate || !meetingLink) {
+      console.error('Missing required fields:', { to, applicantName, interviewDate, meetingLink })
+      throw new Error('Missing required fields for email')
+    }
+
+    console.log('Sending email with data:', { to, applicantName, interviewDate, meetingLink })
 
     const formattedDate = new Date(interviewDate).toLocaleString('en-US', {
       weekday: 'long',
@@ -54,14 +68,13 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     })
 
-    if (!res.ok) {
-      const error = await res.text()
-      console.error('Resend API error:', error)
-      throw new Error('Failed to send email')
-    }
+    const resData = await res.text()
+    console.log('Resend API response:', resData)
 
-    const data = await res.json()
-    console.log('Email sent successfully:', data)
+    if (!res.ok) {
+      console.error('Resend API error:', resData)
+      throw new Error(`Failed to send email: ${resData}`)
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -70,7 +83,10 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error) {
     console.error('Error in send-interview-email function:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to send interview email' }),
+      JSON.stringify({ 
+        error: 'Failed to send interview email', 
+        details: error.message 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
