@@ -35,24 +35,39 @@ const AdminReview = () => {
     interviewLink?: string
   ) => {
     try {
+      // Log the current user session
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session:", session);
+
       // Generate a Google Meet link (in a real application, this would integrate with Google Calendar API)
       const meetLink = "https://meet.google.com/" + Math.random().toString(36).substring(2, 15);
 
+      // First fetch the application to check its current status
       const { data: application, error: fetchError } = await supabase
         .from("provider_applications")
         .select("*")
         .eq("id", applicationId)
         .single();
 
-      if (fetchError) throw fetchError;
+      console.log("Current application data:", application);
 
-      const { error: updateError } = await supabase
+      if (fetchError) {
+        console.error("Error fetching application:", fetchError);
+        throw fetchError;
+      }
+
+      // Update the application status
+      const { data: updateData, error: updateError } = await supabase
         .from("provider_applications")
         .update({
           status: newStatus,
           interview_link: meetLink,
         })
-        .eq("id", applicationId);
+        .eq("id", applicationId)
+        .select()
+        .single();
+
+      console.log("Update response:", { data: updateData, error: updateError });
 
       if (updateError) throw updateError;
 
