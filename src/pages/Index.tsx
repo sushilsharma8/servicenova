@@ -52,7 +52,7 @@ const Index = () => {
             <Button 
               variant="outline" 
               className="w-full border-accent text-accent hover:bg-accent hover:text-black"
-              onClick={() => navigate("/provider-profile")}
+              onClick={() => navigate("/provider-application")}
             >
               I'm a Service Provider
             </Button>
