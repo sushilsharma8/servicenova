@@ -13,6 +13,7 @@ import CreateEvent from "./pages/CreateEvent";
 import ProviderApplication from "./pages/ProviderApplication";
 import ApplicationSuccess from "./pages/ApplicationSuccess";
 import AdminReview from "./pages/AdminReview";
+import ProviderDashboard from "./pages/ProviderDashboard";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <AdminReview />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/provider/dashboard"
+            element={
+              <ProtectedRoute>
+                <ProviderDashboard />
               </ProtectedRoute>
             }
           />
