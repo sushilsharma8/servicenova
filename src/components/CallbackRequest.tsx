@@ -17,11 +17,13 @@ export const CallbackRequest = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from("callback_requests").insert({
-        user_id: user.id,
-        phone_number: phone,
-        status: "pending"
-      });
+      const { error } = await supabase
+        .from("callback_requests")
+        .insert({
+          user_id: user.id,
+          phone_number: phone,
+          status: "pending"
+        } as any); // Using type assertion temporarily until types are properly updated
 
       if (error) throw error;
 
