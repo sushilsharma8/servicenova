@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,6 +11,17 @@ interface EventRequest {
   event_date: string;
   location: string;
   guest_count: number;
+  hours_needed: number;
+  status: string;
+}
+
+interface SupabaseEventRequest {
+  id: string;
+  events: {
+    event_date: string;
+    location: string;
+    guest_count: number;
+  };
   hours_needed: number;
   status: string;
 }
@@ -52,7 +63,20 @@ export default function ProviderDashboard() {
         .eq("provider_id", provider.id);
 
       if (error) throw error;
-      setRequests(data || []);
+
+      // Transform the data to match EventRequest interface
+      const transformedData: EventRequest[] = (data as SupabaseEventRequest[]).map(
+        (request) => ({
+          id: request.id,
+          event_date: request.events.event_date,
+          location: request.events.location,
+          guest_count: request.events.guest_count,
+          hours_needed: request.hours_needed,
+          status: request.status,
+        })
+      );
+
+      setRequests(transformedData);
     } catch (error) {
       console.error("Error fetching requests:", error);
       toast.error("Failed to load requests");
