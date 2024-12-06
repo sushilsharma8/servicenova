@@ -98,7 +98,7 @@ export default function AdminDashboard() {
     },
   });
 
-  const handleDisputeResolution = async (requestId: string, resolution: 'resolved' | 'refunded') => {
+  const handleDisputeResolution = async (requestId: string, resolution: 'completed' | 'cancelled') => {
     try {
       const { error } = await supabase
         .from("event_service_requests")
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      toast.success(`Dispute ${resolution} successfully`);
+      toast.success(`Dispute ${resolution === 'completed' ? 'resolved' : 'cancelled'} successfully`);
       setSelectedDispute(null);
       refetchRequests();
     } catch (error) {
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {requests?.filter(r => r.status === 'disputed').map((dispute) => (
+                  {requests?.filter(r => r.status === 'pending').map((dispute) => (
                     <TableRow key={dispute.id}>
                       <TableCell>
                         {new Date(dispute.created_at).toLocaleDateString()}
@@ -253,20 +253,20 @@ export default function AdminDashboard() {
                       </TableCell>
                       <TableCell>${dispute.rate_agreed || 0}</TableCell>
                       <TableCell>
-                        <Badge variant="destructive">Disputed</Badge>
+                        <Badge variant="destructive">Pending Resolution</Badge>
                       </TableCell>
                       <TableCell>
                         <div className="space-x-2">
                           <Button
                             size="sm"
-                            onClick={() => handleDisputeResolution(dispute.id, 'resolved')}
+                            onClick={() => handleDisputeResolution(dispute.id, 'completed')}
                           >
                             Resolve
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => handleDisputeResolution(dispute.id, 'refunded')}
+                            onClick={() => handleDisputeResolution(dispute.id, 'cancelled')}
                           >
                             Refund
                           </Button>
