@@ -50,15 +50,22 @@ export default function AdminDashboard() {
         .select("created_at, rate_agreed")
         .not("rate_agreed", "is", null);
 
-      const monthlyRevenue = data?.reduce((acc: any, curr) => {
+      if (!data) return [];
+
+      const monthlyRevenue = data.reduce((acc: Record<string, number>, curr) => {
         const month = new Date(curr.created_at).toLocaleString('default', { month: 'short' });
-        acc[month] = (acc[month] || 0) + Number(curr.rate_agreed);
+        // Ensure rate_agreed is treated as a number
+        const amount = typeof curr.rate_agreed === 'string' 
+          ? parseFloat(curr.rate_agreed) 
+          : Number(curr.rate_agreed) || 0;
+        
+        acc[month] = (acc[month] || 0) + amount;
         return acc;
       }, {});
 
-      return Object.entries(monthlyRevenue || {}).map(([month, amount]) => ({
+      return Object.entries(monthlyRevenue).map(([month, amount]) => ({
         month,
-        amount,
+        amount: Number(amount), // Ensure amount is explicitly typed as number
       }));
     },
   });
@@ -92,7 +99,7 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      toast.success(`Dispute ${resolution === 'completed' ? 'resolved' : 'cancelled'} successfully`);
+      toast.success(`Request ${resolution === 'completed' ? 'resolved' : 'cancelled'} successfully`);
       setSelectedDispute(null);
       refetchRequests();
     } catch (error) {
