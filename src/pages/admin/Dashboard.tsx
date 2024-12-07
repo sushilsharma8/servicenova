@@ -21,17 +21,23 @@ export default function AdminDashboard() {
   const { data: metrics } = useQuery({
     queryKey: ["admin-metrics"],
     queryFn: async () => {
+      // Get total events
       const { data: events } = await supabase
         .from("events")
         .select("*");
 
+      // Get approved service providers (status = 'available')
       const { data: providers } = await supabase
         .from("service_providers")
-        .select("*");
+        .select("*")
+        .eq('status', 'available');
 
+      // Get service requests
       const { data: requests } = await supabase
         .from("event_service_requests")
         .select("*");
+
+      console.log("Providers count:", providers?.length || 0); // Debug log
 
       return {
         totalEvents: events?.length || 0,
