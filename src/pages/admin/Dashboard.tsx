@@ -7,28 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
+import { MetricsCards } from "@/components/admin/MetricsCards";
+import { RevenueChart } from "@/components/admin/RevenueChart";
+import { ServiceRequestsTable } from "@/components/admin/ServiceRequestsTable";
+import { DisputesTable } from "@/components/admin/DisputesTable";
 
 export default function AdminDashboard() {
   const [selectedDispute, setSelectedDispute] = useState<string | null>(null);
@@ -120,40 +105,7 @@ export default function AdminDashboard() {
     <div className="container mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Events</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{metrics?.totalEvents}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Service Providers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{metrics?.totalProviders}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{metrics?.totalRequests}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Pending Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{metrics?.pendingRequests}</p>
-          </CardContent>
-        </Card>
-      </div>
+      {metrics && <MetricsCards metrics={metrics} />}
 
       <Tabs defaultValue="analytics" className="space-y-4">
         <TabsList>
@@ -163,25 +115,7 @@ export default function AdminDashboard() {
         </TabsList>
 
         <TabsContent value="analytics">
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Revenue</CardTitle>
-              <CardDescription>Revenue trends over time</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="amount" fill="#3b82f6" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+          {revenueData && <RevenueChart data={revenueData} />}
         </TabsContent>
 
         <TabsContent value="requests">
@@ -191,36 +125,7 @@ export default function AdminDashboard() {
               <CardDescription>Manage all service requests</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Provider</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Rate</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {requests?.map((request) => (
-                    <TableRow key={request.id}>
-                      <TableCell>
-                        {new Date(request.events.event_date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>{request.events.location}</TableCell>
-                      <TableCell>
-                        {request.service_providers?.business_name || "Unassigned"}
-                      </TableCell>
-                      <TableCell>
-                        <Badge>{request.status}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        ${request.rate_agreed || "Not set"}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {requests && <ServiceRequestsTable requests={requests} />}
             </CardContent>
           </Card>
         </TabsContent>
@@ -232,50 +137,13 @@ export default function AdminDashboard() {
               <CardDescription>Handle customer disputes and refunds</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Provider</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {requests?.filter(r => r.status === 'pending').map((dispute) => (
-                    <TableRow key={dispute.id}>
-                      <TableCell>
-                        {new Date(dispute.created_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        {dispute.service_providers?.business_name || "Unknown"}
-                      </TableCell>
-                      <TableCell>${dispute.rate_agreed || 0}</TableCell>
-                      <TableCell>
-                        <Badge variant="destructive">Pending Resolution</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="space-x-2">
-                          <Button
-                            size="sm"
-                            onClick={() => handleDisputeResolution(dispute.id, 'completed')}
-                          >
-                            Resolve
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => handleDisputeResolution(dispute.id, 'cancelled')}
-                          >
-                            Refund
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {requests && (
+                <DisputesTable
+                  disputes={requests.filter(r => r.status === 'pending')}
+                  onResolve={(id) => handleDisputeResolution(id, 'completed')}
+                  onRefund={(id) => handleDisputeResolution(id, 'cancelled')}
+                />
+              )}
             </CardContent>
           </Card>
         </TabsContent>
