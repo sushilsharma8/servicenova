@@ -22,22 +22,40 @@ export default function AdminDashboard() {
     queryKey: ["admin-metrics"],
     queryFn: async () => {
       // Get total events
-      const { data: events } = await supabase
+      const { data: events, error: eventsError } = await supabase
         .from("events")
         .select("*");
 
+      if (eventsError) {
+        console.error("Events error:", eventsError);
+      }
+
       // Get approved service providers (status = 'available')
-      const { data: providers } = await supabase
+      const { data: providers, error: providersError } = await supabase
         .from("service_providers")
         .select("*")
         .eq('status', 'available');
 
+      if (providersError) {
+        console.error("Providers error:", providersError);
+      }
+
+      // Log all providers to see their status
+      const { data: allProviders } = await supabase
+        .from("service_providers")
+        .select("*");
+      
+      console.log("All providers:", allProviders);
+      console.log("Available providers:", providers);
+
       // Get service requests
-      const { data: requests } = await supabase
+      const { data: requests, error: requestsError } = await supabase
         .from("event_service_requests")
         .select("*");
 
-      console.log("Providers count:", providers?.length || 0); // Debug log
+      if (requestsError) {
+        console.error("Requests error:", requestsError);
+      }
 
       return {
         totalEvents: events?.length || 0,
