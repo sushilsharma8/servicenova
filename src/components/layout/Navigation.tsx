@@ -19,13 +19,12 @@ export const Navigation = () => {
       if (!user) return;
 
       // Check if user is a service provider
-      const { data: provider } = await supabase
+      const { data: providers } = await supabase
         .from('service_providers')
         .select('id')
-        .eq('user_id', user.id)
-        .single();
+        .eq('user_id', user.id);
 
-      if (provider) {
+      if (providers && providers.length > 0) {
         setUserRole('provider');
         return;
       }
