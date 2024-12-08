@@ -1,6 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Database } from "@/integrations/supabase/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChefHat, GlassWater, Utensils } from "lucide-react";
 
 type ServiceType = Database["public"]["Enums"]["service_type"];
 
@@ -11,6 +13,30 @@ interface ProfessionalDetailsSectionProps {
   onChange: (field: string, value: string) => void;
 }
 
+const ServiceCard = ({ 
+  type, 
+  icon: Icon, 
+  isSelected, 
+  onClick 
+}: { 
+  type: string; 
+  icon: React.ElementRef<typeof ChefHat | typeof GlassWater | typeof Utensils>;
+  isSelected: boolean;
+  onClick: () => void;
+}) => (
+  <Card 
+    className={`cursor-pointer transition-all hover:border-accent ${
+      isSelected ? 'border-accent bg-card/50' : 'bg-card/30'
+    }`}
+    onClick={onClick}
+  >
+    <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+      <Icon className={`w-12 h-12 ${isSelected ? 'text-accent' : 'text-primary-foreground'}`} />
+      <h3 className="font-semibold text-lg">{type}</h3>
+    </CardContent>
+  </Card>
+);
+
 export const ProfessionalDetailsSection = ({
   serviceType,
   yearsExperience,
@@ -18,42 +44,61 @@ export const ProfessionalDetailsSection = ({
   onChange,
 }: ProfessionalDetailsSectionProps) => {
   return (
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor="serviceType">Service Type</Label>
-        <select
-          id="serviceType"
-          className="w-full p-2 border rounded-md"
-          value={serviceType}
-          onChange={(e) => onChange("serviceType", e.target.value as ServiceType)}
-          required
-        >
-          <option value="bartender">Bartender</option>
-          <option value="chef">Chef</option>
-          <option value="server">Server</option>
-        </select>
-      </div>
+    <div className="space-y-8 animate-fade-in">
+      <CardHeader className="px-0">
+        <CardTitle className="text-3xl font-bold text-center">Choose Your Role</CardTitle>
+      </CardHeader>
 
-      <div>
-        <Label htmlFor="yearsExperience">Years of Experience</Label>
-        <Input
-          id="yearsExperience"
-          type="number"
-          min="0"
-          value={yearsExperience}
-          onChange={(e) => onChange("yearsExperience", e.target.value)}
-          required
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <ServiceCard
+          type="Bartender"
+          icon={GlassWater}
+          isSelected={serviceType === "bartender"}
+          onClick={() => onChange("serviceType", "bartender")}
+        />
+        <ServiceCard
+          type="Chef"
+          icon={ChefHat}
+          isSelected={serviceType === "chef"}
+          onClick={() => onChange("serviceType", "chef")}
+        />
+        <ServiceCard
+          type="Server"
+          icon={Utensils}
+          isSelected={serviceType === "server"}
+          onClick={() => onChange("serviceType", "server")}
         />
       </div>
 
-      <div>
-        <Label htmlFor="certifications">Certifications (comma-separated)</Label>
-        <Input
-          id="certifications"
-          value={certifications}
-          onChange={(e) => onChange("certifications", e.target.value)}
-          placeholder="e.g., Food Safety, Bartending License"
-        />
+      <div className="space-y-6 bg-card/30 p-6 rounded-lg backdrop-blur-sm">
+        <div>
+          <Label htmlFor="yearsExperience" className="text-lg mb-2 block">
+            Years of Experience
+          </Label>
+          <Input
+            id="yearsExperience"
+            type="number"
+            min="0"
+            value={yearsExperience}
+            onChange={(e) => onChange("yearsExperience", e.target.value)}
+            required
+            className="bg-background/50 border-primary/20"
+            placeholder="Enter your years of experience"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="certifications" className="text-lg mb-2 block">
+            Certifications
+          </Label>
+          <Input
+            id="certifications"
+            value={certifications}
+            onChange={(e) => onChange("certifications", e.target.value)}
+            placeholder="e.g., Food Safety, Bartending License (comma-separated)"
+            className="bg-background/50 border-primary/20"
+          />
+        </div>
       </div>
     </div>
   );

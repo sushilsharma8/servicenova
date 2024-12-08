@@ -102,6 +102,7 @@ export type Database = {
           guest_count: number
           id: string
           location: string
+          service_types: Database["public"]["Enums"]["service_type"][] | null
           special_requirements: string | null
           status: Database["public"]["Enums"]["event_status"] | null
           updated_at: string
@@ -114,6 +115,7 @@ export type Database = {
           guest_count: number
           id?: string
           location: string
+          service_types?: Database["public"]["Enums"]["service_type"][] | null
           special_requirements?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           updated_at?: string
@@ -126,6 +128,7 @@ export type Database = {
           guest_count?: number
           id?: string
           location?: string
+          service_types?: Database["public"]["Enums"]["service_type"][] | null
           special_requirements?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           updated_at?: string
