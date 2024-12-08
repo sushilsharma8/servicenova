@@ -20,19 +20,19 @@ export const InterviewScheduleSection = ({ value, onChange }: InterviewScheduleS
   };
 
   return (
-    <Card>
+    <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-lg">
       <CardHeader>
-        <CardTitle>Schedule Interview</CardTitle>
+        <CardTitle className="text-white">Schedule Interview</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>Select Date and Time</Label>
+          <Label className="text-white">Select Date and Time</Label>
           <div className="flex flex-col space-y-4">
             <Calendar
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              className="rounded-md border"
+              className="rounded-md border border-white/10 bg-white/5 text-white"
               disabled={(date) => date < new Date()}
             />
             <input
@@ -46,7 +46,7 @@ export const InterviewScheduleSection = ({ value, onChange }: InterviewScheduleS
                   onChange(format(newDate, "yyyy-MM-dd'T'HH:mm"));
                 }
               }}
-              className="w-full rounded-md border border-input bg-background px-3 py-2"
+              className="w-full rounded-md border border-white/10 bg-white/5 text-white px-3 py-2 focus:border-[#CCFF00] focus:ring-[#CCFF00]"
               required
             />
           </div>

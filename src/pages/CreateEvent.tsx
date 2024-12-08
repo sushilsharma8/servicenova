@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { DollarSign } from "lucide-react";
+import { IndianRupee } from "lucide-react";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ const CreateEvent = () => {
                         required
                       >
                         <option value="" className="bg-[#0A0A0A]">Select duration</option>
-                        <option value="2" className="bg-[#0A0A0A]">2 hour</option>
+                        <option value="2" className="bg-[#0A0A0A]">2 hours</option>
                         <option value="4" className="bg-[#0A0A0A]">4 hours</option>
                         <option value="6" className="bg-[#0A0A0A]">6 hours</option>
                         <option value="8" className="bg-[#0A0A0A]">8 hours</option>
@@ -321,12 +321,12 @@ const CreateEvent = () => {
                 <div className="space-y-2">
                   <Label className="text-white text-lg">Budget Range</Label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <IndianRupee className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
                       type="text"
                       value={formData.budgetRange}
                       onChange={(e) => updateField("budgetRange", e.target.value)}
-                      placeholder="e.g., $1000 - $3000"
+                      placeholder="e.g. INR 1000 - INR 3000"
                       className="pl-10 bg-white/5 border-white/10 text-white focus:border-[#CCFF00] focus:ring-[#CCFF00]"
                       required
                     />
