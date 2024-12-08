@@ -26,13 +26,12 @@ export const DocumentUploadSection = ({ onFileChange }: DocumentUploadSectionPro
       </div>
 
       <div>
-        <Label htmlFor="experienceProof">Experience Proof</Label>
+        <Label htmlFor="experienceProof">Experience Proof (Optional)</Label>
         <Input
           id="experienceProof"
           type="file"
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => handleChange(e, 'experience')}
-          required
         />
       </div>
     </div>

@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label";
 import { Database } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChefHat, GlassWater, Utensils, LucideIcon, X } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 
@@ -96,22 +95,16 @@ export const ProfessionalDetailsSection = ({
           <Label htmlFor="yearsExperience" className="text-lg mb-2 block">
             Years of Experience
           </Label>
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <Slider
-                id="yearsExperience"
-                min={0}
-                max={30}
-                step={1}
-                value={[parseInt(yearsExperience) || 0]}
-                onValueChange={(value) => onChange("yearsExperience", value[0].toString())}
-                className="w-full"
-              />
-            </div>
-            <span className="min-w-[3rem] text-center font-semibold">
-              {yearsExperience || "0"}
-            </span>
-          </div>
+          <Input
+            id="yearsExperience"
+            type="number"
+            min="0"
+            max="50"
+            value={yearsExperience}
+            onChange={(e) => onChange("yearsExperience", e.target.value)}
+            className="w-full"
+            required
+          />
         </div>
 
         <div className="space-y-4">

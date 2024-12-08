@@ -6,8 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { PersonalDetailsSection } from "@/components/provider-application/PersonalDetailsSection";
 import { ProfessionalDetailsSection } from "@/components/provider-application/ProfessionalDetailsSection";
 import { DocumentUploadSection } from "@/components/provider-application/DocumentUploadSection";
+import { InterviewScheduleSection } from "@/components/provider-application/InterviewScheduleSection";
 import { Database } from "@/integrations/supabase/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type ServiceType = Database["public"]["Enums"]["service_type"];
 
@@ -142,20 +142,10 @@ const ProviderApplication = () => {
       case 4:
         return (
           <div className="form-step active">
-            <Card>
-              <CardHeader>
-                <CardTitle>Schedule Interview</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <input
-                  type="datetime-local"
-                  value={formData.preferredInterviewDate}
-                  onChange={(e) => handleChange("preferredInterviewDate", e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2"
-                  required
-                />
-              </CardContent>
-            </Card>
+            <InterviewScheduleSection
+              value={formData.preferredInterviewDate}
+              onChange={(value) => handleChange("preferredInterviewDate", value)}
+            />
           </div>
         );
       default:
