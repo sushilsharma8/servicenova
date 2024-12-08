@@ -2,7 +2,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Database } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChefHat, GlassWater, Utensils, LucideIcon } from "lucide-react";
+import { ChefHat, GlassWater, Utensils, LucideIcon, X } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 
 type ServiceType = Database["public"]["Enums"]["service_type"];
 
@@ -40,6 +43,27 @@ export const ProfessionalDetailsSection = ({
   certifications,
   onChange,
 }: ProfessionalDetailsSectionProps) => {
+  const [certificationInput, setCertificationInput] = useState("");
+  const [certificationsList, setCertificationsList] = useState<string[]>(
+    certifications ? certifications.split(",").map(cert => cert.trim()) : []
+  );
+
+  useEffect(() => {
+    onChange("certifications", certificationsList.join(", "));
+  }, [certificationsList, onChange]);
+
+  const handleAddCertification = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && certificationInput.trim()) {
+      e.preventDefault();
+      setCertificationsList(prev => [...prev, certificationInput.trim()]);
+      setCertificationInput("");
+    }
+  };
+
+  const removeCertification = (index: number) => {
+    setCertificationsList(prev => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       <CardHeader className="px-0">
@@ -68,33 +92,57 @@ export const ProfessionalDetailsSection = ({
       </div>
 
       <div className="space-y-6 bg-card/30 p-6 rounded-lg backdrop-blur-sm">
-        <div>
+        <div className="space-y-4">
           <Label htmlFor="yearsExperience" className="text-lg mb-2 block">
             Years of Experience
           </Label>
-          <Input
-            id="yearsExperience"
-            type="number"
-            min="0"
-            value={yearsExperience}
-            onChange={(e) => onChange("yearsExperience", e.target.value)}
-            required
-            className="bg-background/50 border-primary/20"
-            placeholder="Enter your years of experience"
-          />
+          <div className="flex items-center gap-4">
+            <div className="flex-1">
+              <Slider
+                id="yearsExperience"
+                min={0}
+                max={30}
+                step={1}
+                value={[parseInt(yearsExperience) || 0]}
+                onValueChange={(value) => onChange("yearsExperience", value[0].toString())}
+                className="w-full"
+              />
+            </div>
+            <span className="min-w-[3rem] text-center font-semibold">
+              {yearsExperience || "0"}
+            </span>
+          </div>
         </div>
 
-        <div>
+        <div className="space-y-4">
           <Label htmlFor="certifications" className="text-lg mb-2 block">
             Certifications
           </Label>
-          <Input
-            id="certifications"
-            value={certifications}
-            onChange={(e) => onChange("certifications", e.target.value)}
-            placeholder="e.g., Food Safety, Bartending License (comma-separated)"
-            className="bg-background/50 border-primary/20"
-          />
+          <div className="space-y-2">
+            <Input
+              id="certifications"
+              value={certificationInput}
+              onChange={(e) => setCertificationInput(e.target.value)}
+              onKeyDown={handleAddCertification}
+              placeholder="Type certification and press Enter"
+              className="bg-background/50 border-primary/20"
+            />
+            <div className="flex flex-wrap gap-2 min-h-[2rem]">
+              {certificationsList.map((cert, index) => (
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="px-3 py-1 flex items-center gap-2"
+                >
+                  {cert}
+                  <X
+                    className="h-3 w-3 cursor-pointer hover:text-destructive"
+                    onClick={() => removeCertification(index)}
+                  />
+                </Badge>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
