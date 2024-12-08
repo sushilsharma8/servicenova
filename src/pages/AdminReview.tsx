@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Database } from "@/integrations/supabase/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type ProviderApplication = Database["public"]["Tables"]["provider_applications"]["Row"];
 
@@ -35,14 +36,11 @@ const AdminReview = () => {
     interviewLink?: string
   ) => {
     try {
-      // Log the current user session
       const { data: { session } } = await supabase.auth.getSession();
       console.log("Current session:", session);
 
-      // Generate a Google Meet link (in a real application, this would integrate with Google Calendar API)
       const meetLink = "https://meet.google.com/" + Math.random().toString(36).substring(2, 15);
 
-      // First fetch the application to check its current status
       const { data: application, error: fetchError } = await supabase
         .from("provider_applications")
         .select("*")
@@ -56,7 +54,6 @@ const AdminReview = () => {
         throw fetchError;
       }
 
-      // Update the application status
       const { data: updateData, error: updateError } = await supabase
         .from("provider_applications")
         .update({
@@ -72,7 +69,6 @@ const AdminReview = () => {
       if (updateError) throw updateError;
 
       if (newStatus === "interview_scheduled") {
-        // Send interview notification email
         const { error: emailError } = await supabase.functions.invoke("send-interview-email", {
           body: {
             to: application.email || "applicant@example.com",
@@ -103,88 +99,95 @@ const AdminReview = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Provider Applications Review</h1>
+      <h1 className="text-2xl font-bold mb-6">Provider Applications Review</h1>
       
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Service Type</TableHead>
-            <TableHead>Experience</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Documents</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {applications?.map((application) => (
-            <TableRow key={application.id}>
-              <TableCell>{application.full_name}</TableCell>
-              <TableCell>{application.service_type}</TableCell>
-              <TableCell>{application.years_experience} years</TableCell>
-              <TableCell>
-                <Badge variant={application.status === "pending" ? "secondary" : 
-                            application.status === "approved" ? "outline" : 
-                            application.status === "rejected" ? "destructive" : 
-                            "default"}>
-                  {application.status}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {application.identity_proof_url && (
-                  <a
-                    href={`${supabase.storage.from('provider_documents').getPublicUrl(application.identity_proof_url).data.publicUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline mr-2"
-                  >
-                    ID Proof
-                  </a>
-                )}
-                {application.experience_proof_url && (
-                  <a
-                    href={`${supabase.storage.from('provider_documents').getPublicUrl(application.experience_proof_url).data.publicUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    Experience Proof
-                  </a>
-                )}
-              </TableCell>
-              <TableCell>
-                <div className="space-x-2">
-                  {application.status === "pending" && (
-                    <>
-                      <Button
-                        size="sm"
-                        onClick={() => handleUpdateStatus(application.id, "interview_scheduled")}
+      <Card>
+        <CardHeader>
+          <CardTitle>Applications</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Service Type</TableHead>
+                <TableHead>Experience</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Documents</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {applications?.map((application) => (
+                <TableRow key={application.id}>
+                  <TableCell>{application.full_name}</TableCell>
+                  <TableCell>{application.service_type}</TableCell>
+                  <TableCell>{application.years_experience} years</TableCell>
+                  <TableCell>
+                    <Badge variant={application.status === "pending" ? "secondary" : 
+                                application.status === "approved" ? "outline" : 
+                                application.status === "rejected" ? "destructive" : 
+                                "default"}>
+                      {application.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {application.identity_proof_url && (
+                      <a
+                        href={`${supabase.storage.from('provider_documents').getPublicUrl(application.identity_proof_url).data.publicUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline mr-2"
                       >
-                        Schedule Interview
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleUpdateStatus(application.id, "rejected")}
+                        ID Proof
+                      </a>
+                    )}
+                    {application.experience_proof_url && (
+                      <a
+                        href={`${supabase.storage.from('provider_documents').getPublicUrl(application.experience_proof_url).data.publicUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
                       >
-                        Reject
-                      </Button>
-                    </>
-                  )}
-                  {application.status === "interview_scheduled" && (
-                    <Button
-                      size="sm"
-                      onClick={() => handleUpdateStatus(application.id, "approved")}
-                    >
-                      Approve
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                        Experience Proof
+                      </a>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-x-2">
+                      {application.status === "pending" && (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => handleUpdateStatus(application.id, "interview_scheduled")}
+                          >
+                            Schedule Interview
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleUpdateStatus(application.id, "rejected")}
+                          >
+                            Reject
+                          </Button>
+                        </>
+                      )}
+                      {application.status === "interview_scheduled" && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleUpdateStatus(application.id, "approved")}
+                        >
+                          Approve
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 };

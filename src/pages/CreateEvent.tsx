@@ -175,7 +175,7 @@ const CreateEvent = () => {
                         required
                       >
                         <option value="" className="bg-[#0A0A0A]">Select duration</option>
-                        <option value="2" className="bg-[#0A0A0A]">2 hour</option>
+                        <option value="2" className="bg-[#0A0A0A]">2 hours</option>
                         <option value="4" className="bg-[#0A0A0A]">4 hours</option>
                         <option value="6" className="bg-[#0A0A0A]">6 hours</option>
                         <option value="8" className="bg-[#0A0A0A]">8 hours</option>
@@ -326,7 +326,7 @@ const CreateEvent = () => {
                       type="text"
                       value={formData.budgetRange}
                       onChange={(e) => updateField("budgetRange", e.target.value)}
-                      placeholder="e.g., $1000 - $3000"
+                      placeholder="e.g., INR 1000 - INR 3000"
                       className="pl-10 bg-white/5 border-white/10 text-white focus:border-[#CCFF00] focus:ring-[#CCFF00]"
                       required
                     />

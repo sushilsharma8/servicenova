@@ -154,33 +154,35 @@ const ProviderApplication = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-gradient-to-b from-black to-[#0A0A0A] py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight">Service Provider Application</h1>
-            <p className="mt-2 text-lg text-gray-500">
+            <h1 className="text-4xl font-bold tracking-tight text-white">Service Provider Application</h1>
+            <p className="mt-2 text-lg text-gray-400">
               Join our network of professional service providers
             </p>
           </div>
 
           <div className="space-y-4">
-            <div className="progress-bar">
+            <div className="h-1 bg-white/10 rounded-full">
               <div 
-                className="progress-bar-fill"
+                className="h-1 bg-[#CCFF00] rounded-full transition-all duration-300"
                 style={{ width: `${(currentStep / totalSteps) * 100}%` }}
               />
             </div>
-            <div className="flex justify-between text-sm text-gray-500">
-              <span>Personal Details</span>
-              <span>Professional Info</span>
-              <span>Documents</span>
-              <span>Schedule</span>
+            <div className="flex justify-between text-sm text-gray-400">
+              <span className={currentStep >= 1 ? "text-[#CCFF00]" : ""}>Personal Details</span>
+              <span className={currentStep >= 2 ? "text-[#CCFF00]" : ""}>Professional Info</span>
+              <span className={currentStep >= 3 ? "text-[#CCFF00]" : ""}>Documents</span>
+              <span className={currentStep >= 4 ? "text-[#CCFF00]" : ""}>Schedule</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {renderStep()}
+            <div className="bg-white/5 backdrop-blur-sm border-white/10 p-8 rounded-lg">
+              {renderStep()}
+            </div>
 
             <div className="flex justify-between pt-6">
               {currentStep > 1 && (
@@ -188,6 +190,7 @@ const ProviderApplication = () => {
                   type="button"
                   variant="outline"
                   onClick={prevStep}
+                  className="border-white/10 text-white hover:bg-white/5"
                 >
                   Previous
                 </Button>
@@ -195,7 +198,7 @@ const ProviderApplication = () => {
               {currentStep < totalSteps ? (
                 <Button
                   type="button"
-                  className="ml-auto"
+                  className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90 ml-auto"
                   onClick={nextStep}
                 >
                   Next
@@ -203,7 +206,7 @@ const ProviderApplication = () => {
               ) : (
                 <Button
                   type="submit"
-                  className="ml-auto"
+                  className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90 ml-auto"
                   disabled={loading}
                 >
                   {loading ? "Submitting..." : "Submit Application"}

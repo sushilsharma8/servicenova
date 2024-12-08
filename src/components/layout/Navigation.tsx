@@ -18,7 +18,13 @@ export const Navigation = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Check if user is a service provider
+      // Development Mode: Treat everyone as an admin
+      if (process.env.NODE_ENV === "development") {
+        setUserRole("admin");
+        return;
+      }
+
+      // Check if user is a service provider (production mode)
       const { data: providers } = await supabase
         .from('service_providers')
         .select('id')
@@ -29,10 +35,9 @@ export const Navigation = () => {
         return;
       }
 
-      // For development, consider everyone an admin (as per is_admin() function)
-      // In production, you would check against an admin table
+      // Default to admin if not a provider (assuming a production environment)
       setUserRole('admin');
-
+      
     } catch (error) {
       console.error('Error checking user role:', error);
       setUserRole('client');
@@ -58,6 +63,15 @@ export const Navigation = () => {
                 Home
               </NavigationMenuLink>
             </NavigationMenuItem>
+
+            {/* Development Mode: Show all pages */}
+            {process.env.NODE_ENV === "development" && (
+              <>
+                <NavigationMenuItem>
+                  <NavigationMenuLink onClick={() => navigate("/provider/dashboard")}>Provider Dashboard</NavigationMenuLink>
+                </NavigationMenuItem>
+              </>
+            )}
 
             {/* Admin Navigation */}
             {userRole === 'admin' && (
