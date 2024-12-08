@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PersonalDetailsSection } from "@/components/provider-application/PersonalDetailsSection";
 import { ProfessionalDetailsSection } from "@/components/provider-application/ProfessionalDetailsSection";
 import { DocumentUploadSection } from "@/components/provider-application/DocumentUploadSection";
 import { Database } from "@/integrations/supabase/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type ServiceType = Database["public"]["Enums"]["service_type"];
 
 const ProviderApplication = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+  
   const [formData, setFormData] = useState({
     fullName: "",
     address: "",
@@ -95,47 +97,132 @@ const ProviderApplication = () => {
     }
   };
 
+  const nextStep = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div className="form-step active">
+            <PersonalDetailsSection
+              fullName={formData.fullName}
+              address={formData.address}
+              age={formData.age}
+              onChange={handleChange}
+            />
+          </div>
+        );
+      case 2:
+        return (
+          <div className="form-step active">
+            <ProfessionalDetailsSection
+              serviceType={formData.serviceType}
+              yearsExperience={formData.yearsExperience}
+              certifications={formData.certifications}
+              onChange={handleChange}
+            />
+          </div>
+        );
+      case 3:
+        return (
+          <div className="form-step active">
+            <DocumentUploadSection onFileChange={handleFileChange} />
+          </div>
+        );
+      case 4:
+        return (
+          <div className="form-step active">
+            <Card>
+              <CardHeader>
+                <CardTitle>Schedule Interview</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <input
+                  type="datetime-local"
+                  value={formData.preferredInterviewDate}
+                  onChange={(e) => handleChange("preferredInterviewDate", e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                  required
+                />
+              </CardContent>
+            </Card>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Service Provider Application</h1>
-        <p className="text-gray-500 mt-2">
-          Fill out the form below to apply as a service provider
-        </p>
-      </div>
+    <div className="min-h-screen bg-background py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold tracking-tight">Service Provider Application</h1>
+            <p className="mt-2 text-lg text-gray-500">
+              Join our network of professional service providers
+            </p>
+          </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <PersonalDetailsSection
-          fullName={formData.fullName}
-          address={formData.address}
-          age={formData.age}
-          onChange={handleChange}
-        />
+          <div className="space-y-4">
+            <div className="progress-bar">
+              <div 
+                className="progress-bar-fill"
+                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>Personal Details</span>
+              <span>Professional Info</span>
+              <span>Documents</span>
+              <span>Schedule</span>
+            </div>
+          </div>
 
-        <ProfessionalDetailsSection
-          serviceType={formData.serviceType}
-          yearsExperience={formData.yearsExperience}
-          certifications={formData.certifications}
-          onChange={handleChange}
-        />
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {renderStep()}
 
-        <DocumentUploadSection onFileChange={handleFileChange} />
-
-        <div>
-          <Label htmlFor="preferredInterviewDate">Preferred Interview Date</Label>
-          <Input
-            id="preferredInterviewDate"
-            type="datetime-local"
-            value={formData.preferredInterviewDate}
-            onChange={(e) => handleChange("preferredInterviewDate", e.target.value)}
-            required
-          />
+            <div className="flex justify-between pt-6">
+              {currentStep > 1 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={prevStep}
+                >
+                  Previous
+                </Button>
+              )}
+              {currentStep < totalSteps ? (
+                <Button
+                  type="button"
+                  className="ml-auto"
+                  onClick={nextStep}
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="ml-auto"
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Submit Application"}
+                </Button>
+              )}
+            </div>
+          </form>
         </div>
-
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Submitting..." : "Submit Application"}
-        </Button>
-      </form>
+      </div>
     </div>
   );
 };
