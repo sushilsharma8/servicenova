@@ -15,6 +15,7 @@ import ApplicationSuccess from "./pages/ApplicationSuccess";
 import AdminReview from "./pages/AdminReview";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -118,6 +119,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <Contact />
               </ProtectedRoute>
             }
           />
