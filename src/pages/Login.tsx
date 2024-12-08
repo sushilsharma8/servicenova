@@ -15,8 +15,10 @@ const Login = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <AuthForm />
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+      <div className="w-full">
+        <AuthForm />
+      </div>
     </div>
   );
 };
