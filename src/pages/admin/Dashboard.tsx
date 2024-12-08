@@ -30,23 +30,23 @@ export default function AdminDashboard() {
         console.error("Events error:", eventsError);
       }
 
-      // Get approved service providers (status = 'available')
+      // Get approved provider applications
       const { data: providers, error: providersError } = await supabase
-        .from("service_providers")
+        .from("provider_applications")
         .select("*")
-        .eq('status', 'available');
+        .eq('status', 'approved');
 
       if (providersError) {
         console.error("Providers error:", providersError);
       }
 
-      // Log all providers to see their status
+      // Log all provider applications to see their status
       const { data: allProviders } = await supabase
-        .from("service_providers")
+        .from("provider_applications")
         .select("*");
       
-      console.log("All providers:", allProviders);
-      console.log("Available providers:", providers);
+      console.log("All provider applications:", allProviders);
+      console.log("Approved provider applications:", providers);
 
       // Get service requests
       const { data: requests, error: requestsError } = await supabase
