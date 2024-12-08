@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Database } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChefHat, GlassWater, Utensils } from "lucide-react";
+import { ChefHat, GlassWater, Utensils, LucideIcon } from "lucide-react";
 
 type ServiceType = Database["public"]["Enums"]["service_type"];
 
@@ -13,17 +13,14 @@ interface ProfessionalDetailsSectionProps {
   onChange: (field: string, value: string) => void;
 }
 
-const ServiceCard = ({ 
-  type, 
-  icon: Icon, 
-  isSelected, 
-  onClick 
-}: { 
-  type: string; 
-  icon: React.ElementRef<typeof ChefHat | typeof GlassWater | typeof Utensils>;
+interface ServiceCardProps {
+  type: string;
+  icon: LucideIcon;
   isSelected: boolean;
   onClick: () => void;
-}) => (
+}
+
+const ServiceCard = ({ type, icon: Icon, isSelected, onClick }: ServiceCardProps) => (
   <Card 
     className={`cursor-pointer transition-all hover:border-accent ${
       isSelected ? 'border-accent bg-card/50' : 'bg-card/30'
