@@ -21,7 +21,6 @@ const ProviderApplication = () => {
     fullName: "",
     address: "",
     age: "",
-    phoneNumber: "", // Added phone number field
     serviceType: "bartender" as ServiceType,
     yearsExperience: "",
     certifications: "",
@@ -79,7 +78,6 @@ const ProviderApplication = () => {
         full_name: formData.fullName,
         address: formData.address,
         age: parseInt(formData.age),
-        phone_number: formData.phoneNumber, // Include phone number in submission
         service_type: formData.serviceType,
         years_experience: parseInt(formData.yearsExperience),
         certifications: formData.certifications.split(',').map(cert => cert.trim()),
@@ -120,7 +118,6 @@ const ProviderApplication = () => {
               fullName={formData.fullName}
               address={formData.address}
               age={formData.age}
-              phoneNumber={formData.phoneNumber} // Pass phone number to PersonalDetailsSection
               onChange={handleChange}
             />
           </div>

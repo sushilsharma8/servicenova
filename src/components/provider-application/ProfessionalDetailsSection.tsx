@@ -29,8 +29,8 @@ const ServiceCard = ({ type, icon: Icon, isSelected, onClick }: ServiceCardProps
     }`}
     onClick={onClick}
   >
-    <CardContent className="p-3 flex flex-col items-center text-center space-x y-2">
-      <Icon className={`w-8 h-8 ${isSelected ? 'text-accent' : 'text-primary-foreground'}`} />
+    <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+      <Icon className={`w-12 h-12 ${isSelected ? 'text-accent' : 'text-primary-foreground'}`} />
       <h3 className="font-semibold text-lg">{type}</h3>
     </CardContent>
   </Card>
@@ -64,12 +64,12 @@ export const ProfessionalDetailsSection = ({
   };
 
   return (
-    <div className="space-y-3 animate-fade-in">
+    <div className="space-y-8 animate-fade-in">
       <CardHeader className="px-0">
-        <CardTitle className="text-4xl font-bold text-center">Choose Your Role</CardTitle>
+        <CardTitle className="text-3xl font-bold text-center">Choose Your Role</CardTitle>
       </CardHeader>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <ServiceCard
           type="Bartender"
           icon={GlassWater}
