@@ -5,18 +5,42 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, Calendar, Users, UserRound, Home } from "lucide-react";
 
+type UserRole = 'admin' | 'provider' | 'client' | null;
+
 export const Navigation = () => {
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState<'admin' | 'provider' | 'client' | null>(null);
+  const [userRole, setUserRole] = useState<UserRole>(() => {
+    // Initialize from localStorage if available
+    const cachedRole = localStorage.getItem('userRole');
+    return (cachedRole as UserRole) || null;
+  });
 
   useEffect(() => {
     checkUserRole();
+
+    // Subscribe to auth changes to update role when needed
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        setUserRole(null);
+        localStorage.removeItem('userRole');
+      } else if (event === 'SIGNED_IN') {
+        checkUserRole();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const checkUserRole = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setUserRole(null);
+        localStorage.removeItem('userRole');
+        return;
+      }
 
       const { data: providers } = await supabase
         .from('provider_applications')
@@ -24,21 +48,40 @@ export const Navigation = () => {
         .eq('user_id', user.id)
         .eq('status', 'approved');
 
+      let newRole: UserRole;
       if (providers && providers.length > 0) {
-        setUserRole('provider');
-        return;
+        newRole = 'provider';
+      } else if (import.meta.env.DEV || await checkIsAdmin()) {
+        newRole = 'admin';
+      } else {
+        newRole = 'client';
       }
 
-      setUserRole('admin');
+      // Update state and cache
+      setUserRole(newRole);
+      localStorage.setItem('userRole', newRole);
       
     } catch (error) {
       console.error('Error checking user role:', error);
       setUserRole('client');
+      localStorage.setItem('userRole', 'client');
+    }
+  };
+
+  const checkIsAdmin = async () => {
+    try {
+      const { data, error } = await supabase.rpc('is_admin');
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      return false;
     }
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    localStorage.removeItem('userRole');
     navigate("/login");
   };
 
