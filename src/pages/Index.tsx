@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Users, CheckCircle, Star, ChefHat, Calendar, TrendingUp, ArrowRight } from "lucide-react";
+import { CalendarCheck, Users, CheckCircle, Star, ChefHat, Calendar, ArrowRight , PhoneCall, UserRoundSearch} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { testimonials } from "@/data/testimonials";
 
@@ -7,7 +7,7 @@ export default function Index() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-dark-bg text-white">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center pt-12 md:pt-0">
         <div className="absolute inset-0 z-0">
@@ -22,14 +22,14 @@ export default function Index() {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl font-bold tracking-tight">
+              <h1 className="text-4xl font-bold tracking-tight">
                 Elevate Your Event
               </h1>
               <div className="space-y-2">
-                <h2 className="text-5xl font-bold bg-gradient-to-r from-[#9FE860] to-[#2AD168] text-transparent bg-clip-text">
+                <h2 className="text-4xl font-bold neon-gradient">
                   Professional Staff,
                 </h2>
-                <h2 className="text-5xl font-bold bg-gradient-to-r from-[#9FE860] to-[#2AD168] text-transparent bg-clip-text">
+                <h2 className="text-4xl font-bold neon-gradient">
                   Exceptional Service
                 </h2>
               </div>
@@ -41,28 +41,33 @@ export default function Index() {
             <div className="flex flex-wrap gap-4 justify-center pt-8">
               <Button 
                 size="lg" 
-                className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90 text-lg px-8 flex items-center"
+                className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
                 onClick={() => navigate("/create-event")}
               >
                 I'm Hosting an Event
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <CalendarCheck className="ml-2 h-5 w-5" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10 text-lg px-8"
+                className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
                 onClick={() => navigate("/provider-application")}
               >
                 I'm a Service Provider
+                <Users className="ml-1 h-5 w-5" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="bg-white/10 text-white hover:bg-white/20 text-lg px-8"
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-white/10 text-white hover:bg-white/20 text-lg px-8 flex items-center gap-2 glass-card transition-transform transform hover:-translate-y-1 hover:scale-104"
                 onClick={() => navigate("/contact")}
               >
-                Request a Call Back
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-neon-green/20 text-neon-green">
+                  <PhoneCall className="w-5 h-5" />
+                </div>
+                <span className="font-medium">Request a Call Back</span>
               </Button>
+
             </div>
           </div>
         </div>
@@ -74,7 +79,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16">
             <div className="space-y-12">
-              <h2 className="text-3xl font-bold text-white">For Event Hosts</h2>
+              <h2 className="text-3xl font-bold text-white neon-gradient">For Event Hosts</h2>
               <div className="space-y-8">
                 <FeatureItem 
                   icon={Calendar} 
@@ -95,7 +100,7 @@ export default function Index() {
             </div>
 
             <div className="space-y-12">
-              <h2 className="text-3xl font-bold text-white">For Service Providers</h2>
+              <h2 className="text-3xl font-bold text-white neon-gradient">For Service Providers</h2>
               <div className="space-y-8">
                 <FeatureItem 
                   icon={Star} 
@@ -118,8 +123,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Testimonials Section - clean design */}
-      <section className="py-24 bg-gradient-to-b from-[#111] to-[#0A0A0A]">
+      {/* Testimonials Section */}
+      <section className="py-24 bg-gradient-to-b from-[#111] to-dark-bg">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-white mb-16">
             What People Say
@@ -128,7 +133,7 @@ export default function Index() {
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index} 
-                className="bg-white/5 backdrop-blur-lg p-8 rounded-xl ring-1 ring-white/10 transition-all hover:bg-white/10"
+                className="glass-card p-8 rounded-xl transition-all hover:bg-white/10"
               >
                 <div className="flex mb-6">
                   {[...Array(5)].map((_, i) => (
@@ -159,10 +164,10 @@ export default function Index() {
   );
 }
 
-// Clean FeatureItem component
+// Updated FeatureItem component
 const FeatureItem = ({ icon: Icon, title, description }) => (
   <div className="flex gap-4">
-    <Icon className="w-8 h-8 text-[#CCFF00]" />
+    <Icon className="w-8 h-8 text-neon-green" />
     <div>
       <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
       <p className="text-gray-400">{description}</p>

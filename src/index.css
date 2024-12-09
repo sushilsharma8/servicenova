@@ -4,6 +4,46 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --neon-green: #CCFF00;
+  --dark-bg: #0A0A0A;
+  --card-bg: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+
+.neon-gradient {
+  background: linear-gradient(135deg, var(--neon-green), #00FF94);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.neon-border {
+  position: relative;
+  border-width: 0px;
+}
+
+.neon-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, var(--neon-green), #00FF94);
+  border-radius: inherit;
+  z-index: -1;
+}
+
 body {
   @apply bg-background font-sans text-white;
 }
