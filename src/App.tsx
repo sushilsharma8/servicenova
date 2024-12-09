@@ -24,16 +24,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // In development, consider the user always authenticated
-    if (import.meta.env.DEV) {
-      setIsAuthenticated(true);
-      return;
-    }
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAuthenticated(!!session);
-    });
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -61,15 +51,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // In development, consider the user not authenticated to allow login page access
-    if (import.meta.env.DEV) {
-      setIsAuthenticated(false);
-      return;
-    }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAuthenticated(!!session);
-    });
 
     const {
       data: { subscription },
