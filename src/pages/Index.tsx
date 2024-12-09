@@ -2,19 +2,9 @@ import { Button } from "@/components/ui/button";
 import { CalendarDays, Users, CheckCircle, Star, ChefHat, Calendar, TrendingUp, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { testimonials } from "@/data/testimonials";
-import { useAuth } from "@/hooks/auth"; // Import the useAuth hook
 
 export default function Index() {
   const navigate = useNavigate();
-  const { user } = useAuth(); // Access the user state
-
-  const handleNavigation = (path: string) => {
-    if (user) {
-      navigate(path);
-    } else {
-      navigate("/login");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -52,7 +42,7 @@ export default function Index() {
               <Button 
                 size="lg" 
                 className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90 text-lg px-8 flex items-center"
-                onClick={() => handleNavigation("/create-event")}
+                onClick={() => navigate("/create-event")}
               >
                 I'm Hosting an Event
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -61,7 +51,7 @@ export default function Index() {
                 size="lg" 
                 variant="outline" 
                 className="border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10 text-lg px-8"
-                onClick={() => handleNavigation("/provider-application")}
+                onClick={() => navigate("/provider-application")}
               >
                 I'm a Service Provider
               </Button>
@@ -69,7 +59,7 @@ export default function Index() {
                 size="lg" 
                 variant="outline" 
                 className="bg-white/10 text-white hover:bg-white/20 text-lg px-8"
-                onClick={() => handleNavigation("/contact")}
+                onClick={() => navigate("/contact")}
               >
                 Request a Call Back
               </Button>
