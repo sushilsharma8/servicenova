@@ -9,7 +9,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center">
+      <section className="relative min-h-[80vh] flex items-center pt-12 md:pt-0">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-[#0A0A0A]" />
           <img
@@ -18,11 +18,11 @@ export default function Index() {
             className="w-full h-full object-cover"
           />
         </div>
-        
+
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center space-y-8">
             <div className="space-y-6">
-              <h1 className="text-6xl font-bold tracking-tight">
+              <h1 className="text-5xl font-bold tracking-tight">
                 Elevate Your Event
               </h1>
               <div className="space-y-2">
@@ -67,6 +67,7 @@ export default function Index() {
           </div>
         </div>
       </section>
+
 
       {/* Features Section - clean design */}
       <section className="py-24 bg-gradient-to-b from-[#0A0A0A] to-[#111]">
