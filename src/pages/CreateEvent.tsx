@@ -43,17 +43,6 @@ const CreateEvent = () => {
     try {
       let { data: session } = await supabase.auth.getSession();
   
-      if (!session || session.session.expires_at < Date.now() / 1000) {
-        // Session is expired, refresh it
-        const { error } = await supabase.auth.refreshSession();
-        if (error) {
-          throw new Error("Failed to refresh session");
-        }
-  
-        // Get the refreshed session
-        ({ data: session } = await supabase.auth.getSession());
-      }
-  
       if (!session?.session?.user) {
         toast.error("Please sign in to create an event");
         navigate("/auth");
@@ -206,7 +195,7 @@ const CreateEvent = () => {
                 <div className="space-y-4">
                   <Label className="text-white text-lg">Select Services</Label>
                   <div className="space-y-3">
-                    {[
+                    {[ 
                       { id: 'chef', label: 'Chef', icon: ChefHat, description: 'Professional chef for your event' },
                       { id: 'bartender', label: 'Bartender', icon: Martini, description: 'Expert mixologist' },
                       { id: 'server', label: 'Server', icon: Utensils, description: 'Professional wait staff' }
@@ -313,7 +302,7 @@ const CreateEvent = () => {
                           </div>
                         )}
                       </div>
-                    ))}
+                    ))} 
                   </div>
                 </div>
 
