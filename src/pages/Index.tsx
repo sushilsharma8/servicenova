@@ -22,34 +22,35 @@ export default function Index() {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center space-y-8">
             <div className="space-y-6">
-              <h1 className="text-4xl font-bold tracking-tight">
+              <h1 className="text-5xl font-bold tracking-tight">
                 Elevate Your Event
               </h1>
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold neon-gradient">
+                <span className="block text-4xl font-bold neon-gradient">
                   Professional Staff,
-                </h2>
-                <h2 className="text-4xl font-bold neon-gradient">
+                </span>
+                <span className="block text-4xl font-bold neon-gradient">
                   Exceptional Service
-                </h2>
+                </span>
               </div>
+
               <p className="text-xl text-gray-300">
                 Find skilled bartenders, chefs, and F&B staff for your next event in just a few clicks.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center pt-8">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
                 onClick={() => navigate("/create-event")}
               >
                 I'm Hosting an Event
                 <CalendarCheck className="ml-2 h-5 w-5" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
+              <Button
+                size="lg"
+                variant="outline"
                 className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
                 onClick={() => navigate("/provider-application")}
               >
@@ -67,7 +68,6 @@ export default function Index() {
                 </div>
                 <span className="font-medium">Request a Call Back</span>
               </Button>
-
             </div>
           </div>
         </div>
