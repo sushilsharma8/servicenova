@@ -10,6 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Database } from "@/integrations/supabase/types";
+
+type ProviderApplication = Database['public']['Tables']['provider_applications']['Row'];
 
 export const ServiceProviderList = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -28,7 +31,7 @@ export const ServiceProviderList = () => {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      return data as ProviderApplication[];
     },
   });
 

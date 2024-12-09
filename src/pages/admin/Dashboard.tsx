@@ -105,8 +105,9 @@ export default function AdminDashboard() {
             event_date,
             location
           ),
-          service_providers (
-            business_name
+          provider_applications (
+            full_name,
+            service_type
           )
         `)
         .order("created_at", { ascending: false });

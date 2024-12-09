@@ -19,9 +19,10 @@ export const Navigation = () => {
       if (!user) return;
 
       const { data: providers } = await supabase
-        .from('service_providers')
+        .from('provider_applications')
         .select('id')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('status', 'approved');
 
       if (providers && providers.length > 0) {
         setUserRole('provider');
