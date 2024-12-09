@@ -11,33 +11,36 @@ export type Database = {
     Tables: {
       callback_requests: {
         Row: {
-          callback_time: string | null
+          best_time: string
           created_at: string
+          email: string
           id: string
-          notes: string | null
+          message: string | null
+          name: string
           phone_number: string
-          status: string
-          updated_at: string
+          status: string | null
           user_id: string
         }
         Insert: {
-          callback_time?: string | null
+          best_time: string
           created_at?: string
+          email: string
           id?: string
-          notes?: string | null
+          message?: string | null
+          name: string
           phone_number: string
-          status?: string
-          updated_at?: string
+          status?: string | null
           user_id: string
         }
         Update: {
-          callback_time?: string | null
+          best_time?: string
           created_at?: string
+          email?: string
           id?: string
-          notes?: string | null
+          message?: string | null
+          name?: string
           phone_number?: string
-          status?: string
-          updated_at?: string
+          status?: string | null
           user_id?: string
         }
         Relationships: []
@@ -84,13 +87,6 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "event_service_requests_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "service_providers"
-            referencedColumns: ["id"]
-          },
         ]
       }
       events: {
@@ -98,12 +94,13 @@ export type Database = {
           budget_range: string | null
           client_id: string
           created_at: string
+          duration_hours: number
           event_date: string
           guest_count: number
           id: string
           location: string
+          service_counts: Json
           service_types: Database["public"]["Enums"]["service_type"][] | null
-          special_requirements: string | null
           status: Database["public"]["Enums"]["event_status"] | null
           updated_at: string
         }
@@ -111,12 +108,13 @@ export type Database = {
           budget_range?: string | null
           client_id: string
           created_at?: string
+          duration_hours: number
           event_date: string
           guest_count: number
           id?: string
           location: string
+          service_counts?: Json
           service_types?: Database["public"]["Enums"]["service_type"][] | null
-          special_requirements?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           updated_at?: string
         }
@@ -124,12 +122,13 @@ export type Database = {
           budget_range?: string | null
           client_id?: string
           created_at?: string
+          duration_hours?: number
           event_date?: string
           guest_count?: number
           id?: string
           location?: string
+          service_counts?: Json
           service_types?: Database["public"]["Enums"]["service_type"][] | null
-          special_requirements?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           updated_at?: string
         }
@@ -261,59 +260,7 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "reviews_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "service_providers"
-            referencedColumns: ["id"]
-          },
         ]
-      }
-      service_providers: {
-        Row: {
-          business_name: string | null
-          certifications: string[] | null
-          created_at: string
-          description: string | null
-          hourly_rate: number | null
-          id: string
-          rating: number | null
-          service_type: Database["public"]["Enums"]["service_type"]
-          status: Database["public"]["Enums"]["provider_status"] | null
-          updated_at: string
-          user_id: string
-          years_experience: number | null
-        }
-        Insert: {
-          business_name?: string | null
-          certifications?: string[] | null
-          created_at?: string
-          description?: string | null
-          hourly_rate?: number | null
-          id?: string
-          rating?: number | null
-          service_type: Database["public"]["Enums"]["service_type"]
-          status?: Database["public"]["Enums"]["provider_status"] | null
-          updated_at?: string
-          user_id: string
-          years_experience?: number | null
-        }
-        Update: {
-          business_name?: string | null
-          certifications?: string[] | null
-          created_at?: string
-          description?: string | null
-          hourly_rate?: number | null
-          id?: string
-          rating?: number | null
-          service_type?: Database["public"]["Enums"]["service_type"]
-          status?: Database["public"]["Enums"]["provider_status"] | null
-          updated_at?: string
-          user_id?: string
-          years_experience?: number | null
-        }
-        Relationships: []
       }
     }
     Views: {
