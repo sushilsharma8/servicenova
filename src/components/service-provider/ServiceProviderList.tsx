@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ServiceProviderProfile } from "@/types/service-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +18,9 @@ export const ServiceProviderList = () => {
     queryKey: ["service-providers", selectedType],
     queryFn: async () => {
       let query = supabase
-        .from("service_providers")
+        .from("provider_applications")
         .select("*")
-        .eq("status", "available");
+        .eq("status", "approved");
 
       if (selectedType) {
         query = query.eq("service_type", selectedType);
@@ -29,7 +28,7 @@ export const ServiceProviderList = () => {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as ServiceProviderProfile[];
+      return data;
     },
   });
 
@@ -61,7 +60,7 @@ export const ServiceProviderList = () => {
         {providers?.map((provider) => (
           <Card key={provider.id}>
             <CardHeader>
-              <CardTitle>{provider.business_name}</CardTitle>
+              <CardTitle>{provider.full_name}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -69,14 +68,11 @@ export const ServiceProviderList = () => {
                   Service: {provider.service_type}
                 </p>
                 <p className="text-sm text-gray-600">
-                  Rate: ${provider.hourly_rate}/hour
-                </p>
-                <p className="text-sm text-gray-600">
                   Experience: {provider.years_experience} years
                 </p>
-                {provider.rating && (
+                {provider.certifications && provider.certifications.length > 0 && (
                   <p className="text-sm text-gray-600">
-                    Rating: {provider.rating.toFixed(1)} / 5
+                    Certifications: {provider.certifications.join(", ")}
                   </p>
                 )}
                 <Button
