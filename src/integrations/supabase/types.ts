@@ -161,7 +161,6 @@ export type Database = {
       provider_applications: {
         Row: {
           address: string
-          admin_notes: string | null
           age: number
           certifications: string[] | null
           created_at: string
@@ -171,6 +170,7 @@ export type Database = {
           id: string
           identity_proof_url: string | null
           interview_link: string | null
+          phone_number: number | null
           preferred_interview_date: string | null
           service_type: Database["public"]["Enums"]["service_type"]
           status:
@@ -182,7 +182,6 @@ export type Database = {
         }
         Insert: {
           address: string
-          admin_notes?: string | null
           age: number
           certifications?: string[] | null
           created_at?: string
@@ -192,6 +191,7 @@ export type Database = {
           id?: string
           identity_proof_url?: string | null
           interview_link?: string | null
+          phone_number?: number | null
           preferred_interview_date?: string | null
           service_type: Database["public"]["Enums"]["service_type"]
           status?:
@@ -203,7 +203,6 @@ export type Database = {
         }
         Update: {
           address?: string
-          admin_notes?: string | null
           age?: number
           certifications?: string[] | null
           created_at?: string
@@ -213,6 +212,7 @@ export type Database = {
           id?: string
           identity_proof_url?: string | null
           interview_link?: string | null
+          phone_number?: number | null
           preferred_interview_date?: string | null
           service_type?: Database["public"]["Enums"]["service_type"]
           status?:
