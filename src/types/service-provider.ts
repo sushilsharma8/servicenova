@@ -1,11 +1,10 @@
 export interface ServiceProviderProfile {
-  id?: string;
-  business_name: string;
+  full_name: string;
+  address: string;
+  age: number;
   service_type: "bartender" | "chef" | "server";
-  description: string;
-  hourly_rate: number;
   years_experience: number;
   certifications: string[];
-  rating?: number;
-  status?: "available" | "busy" | "inactive";
+  phone_number?: string;
+  email?: string;
 }

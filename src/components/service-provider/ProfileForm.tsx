@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type { ServiceProviderProfile } from "@/types/service-provider";
 
 interface ProfileFormProps {
@@ -39,12 +38,38 @@ export const ProfileForm = ({ profile: initialProfile, onSubmit }: ProfileFormPr
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <Label htmlFor="business_name">Business Name</Label>
+        <Label htmlFor="full_name">Full Name</Label>
         <Input
-          id="business_name"
-          value={profile.business_name}
+          id="full_name"
+          value={profile.full_name}
           onChange={(e) =>
-            setProfile({ ...profile, business_name: e.target.value })
+            setProfile({ ...profile, full_name: e.target.value })
+          }
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="address">Address</Label>
+        <Input
+          id="address"
+          value={profile.address}
+          onChange={(e) =>
+            setProfile({ ...profile, address: e.target.value })
+          }
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="age">Age</Label>
+        <Input
+          id="age"
+          type="number"
+          min="18"
+          value={profile.age}
+          onChange={(e) =>
+            setProfile({ ...profile, age: parseInt(e.target.value) })
           }
           required
         />
@@ -71,33 +96,6 @@ export const ProfileForm = ({ profile: initialProfile, onSubmit }: ProfileFormPr
       </div>
 
       <div>
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          value={profile.description}
-          onChange={(e) =>
-            setProfile({ ...profile, description: e.target.value })
-          }
-          required
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="hourly_rate">Hourly Rate ($)</Label>
-        <Input
-          id="hourly_rate"
-          type="number"
-          min="0"
-          step="0.01"
-          value={profile.hourly_rate}
-          onChange={(e) =>
-            setProfile({ ...profile, hourly_rate: parseFloat(e.target.value) })
-          }
-          required
-        />
-      </div>
-
-      <div>
         <Label htmlFor="years_experience">Years of Experience</Label>
         <Input
           id="years_experience"
@@ -111,6 +109,30 @@ export const ProfileForm = ({ profile: initialProfile, onSubmit }: ProfileFormPr
             })
           }
           required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="phone_number">Phone Number</Label>
+        <Input
+          id="phone_number"
+          type="tel"
+          value={profile.phone_number}
+          onChange={(e) =>
+            setProfile({ ...profile, phone_number: e.target.value })
+          }
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={profile.email}
+          onChange={(e) =>
+            setProfile({ ...profile, email: e.target.value })
+          }
         />
       </div>
 

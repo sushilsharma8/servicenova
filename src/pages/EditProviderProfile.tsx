@@ -46,10 +46,14 @@ const EditProviderProfile = () => {
       const { error } = await supabase
         .from("provider_applications")
         .update({
-          full_name: updatedProfile.business_name,
+          full_name: updatedProfile.full_name,
+          address: updatedProfile.address,
+          age: updatedProfile.age,
           service_type: updatedProfile.service_type,
           years_experience: updatedProfile.years_experience,
           certifications: updatedProfile.certifications,
+          phone_number: updatedProfile.phone_number ? parseFloat(updatedProfile.phone_number) : null,
+          email: updatedProfile.email
         })
         .eq("user_id", user.id)
         .eq("status", "approved");
@@ -64,12 +68,14 @@ const EditProviderProfile = () => {
   };
 
   const initialProfile: ServiceProviderProfile = {
-    business_name: profile.full_name,
+    full_name: profile.full_name,
+    address: profile.address,
+    age: profile.age,
     service_type: profile.service_type,
-    description: "", // Removed as it's not in our schema
-    hourly_rate: 0, // Removed as it's not in our schema
     years_experience: profile.years_experience,
     certifications: profile.certifications || [],
+    phone_number: profile.phone_number?.toString(),
+    email: profile.email
   };
 
   return (
