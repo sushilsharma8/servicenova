@@ -52,7 +52,7 @@ export default function Index() {
                 size="lg"
                 variant="outline"
                 className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
-                onClick={() => navigate("/provider-application")}
+                onClick={() => navigate("/provider/application")}
               >
                 I'm a Service Provider
                 <Users className="ml-1 h-5 w-5" />
