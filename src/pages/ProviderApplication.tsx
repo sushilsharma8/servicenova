@@ -21,7 +21,8 @@ const ProviderApplication = () => {
     fullName: "",
     address: "",
     age: "",
-    phoneNumber: "", // Added phone number field
+    phoneNumber: "", 
+    email: "",
     serviceType: "bartender" as ServiceType,
     yearsExperience: "",
     certifications: "",
@@ -74,18 +75,24 @@ const ProviderApplication = () => {
         experienceProofUrl = await uploadFile(formData.experienceProof, 'experience');
       }
 
+      // Convert string values to numbers where needed
+      const phoneNumber = formData.phoneNumber ? parseFloat(formData.phoneNumber) : null;
+      const age = parseInt(formData.age);
+      const yearsExperience = parseInt(formData.yearsExperience);
+
       const { error } = await supabase.from('provider_applications').insert({
-        user_id: user.id,
         full_name: formData.fullName,
         address: formData.address,
-        age: parseInt(formData.age),
-        phone_number: formData.phoneNumber, // Include phone number in submission
+        age: age,
+        phone_number: phoneNumber,
+        email: formData.email,
         service_type: formData.serviceType,
-        years_experience: parseInt(formData.yearsExperience),
+        years_experience: yearsExperience,
         certifications: formData.certifications.split(',').map(cert => cert.trim()),
         identity_proof_url: identityProofUrl,
         experience_proof_url: experienceProofUrl,
         preferred_interview_date: formData.preferredInterviewDate,
+        user_id: user.id
       });
 
       if (error) throw error;
@@ -120,7 +127,8 @@ const ProviderApplication = () => {
               fullName={formData.fullName}
               address={formData.address}
               age={formData.age}
-              phoneNumber={formData.phoneNumber} // Pass phone number to PersonalDetailsSection
+              phoneNumber={formData.phoneNumber}
+              email={formData.email}
               onChange={handleChange}
             />
           </div>
