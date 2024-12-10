@@ -2,12 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase } from "lucide-react";
 import type { ProviderProfile } from "@/types/provider";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileOverviewProps {
   userData: ProviderProfile;
 }
 
 export const ProfileOverview = ({ userData }: ProfileOverviewProps) => {
+  const navigate = useNavigate();
+
+  const handleEditProfile = () => {
+    navigate("/provider/profile/edit");
+  };
+
   return (
     <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-lg">
       <CardHeader>
@@ -38,9 +45,7 @@ export const ProfileOverview = ({ userData }: ProfileOverviewProps) => {
         </div>
         <Button
           className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90 w-full"
-          onClick={() => {
-            console.log("Edit profile clicked");
-          }}
+          onClick={handleEditProfile}
         >
           Edit Profile
         </Button>
