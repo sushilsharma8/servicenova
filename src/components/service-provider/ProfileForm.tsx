@@ -3,16 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import type { ServiceProviderProfile } from "@/types/service-provider";
 
 interface ProfileFormProps {
   profile: ServiceProviderProfile;
-  setProfile: (profile: ServiceProviderProfile) => void;
+  onSubmit: (profile: ServiceProviderProfile) => void;
 }
 
-export const ProfileForm = ({ profile, setProfile }: ProfileFormProps) => {
+export const ProfileForm = ({ profile: initialProfile, onSubmit }: ProfileFormProps) => {
+  const [profile, setProfile] = useState(initialProfile);
   const [newCertification, setNewCertification] = useState("");
 
   const addCertification = () => {
@@ -32,8 +31,13 @@ export const ProfileForm = ({ profile, setProfile }: ProfileFormProps) => {
     });
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(profile);
+  };
+
   return (
-    <div className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <Label htmlFor="business_name">Business Name</Label>
         <Input
@@ -50,7 +54,7 @@ export const ProfileForm = ({ profile, setProfile }: ProfileFormProps) => {
         <Label htmlFor="service_type">Service Type</Label>
         <select
           id="service_type"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md bg-background"
           value={profile.service_type}
           onChange={(e) =>
             setProfile({
@@ -126,9 +130,9 @@ export const ProfileForm = ({ profile, setProfile }: ProfileFormProps) => {
           {profile.certifications?.map((cert, index) => (
             <div
               key={index}
-              className="flex items-center justify-between bg-gray-50 p-2 rounded"
+              className="flex items-center justify-between bg-white/5 p-2 rounded"
             >
-              <span>{cert}</span>
+              <span className="text-white">{cert}</span>
               <Button
                 type="button"
                 variant="destructive"
@@ -140,6 +144,10 @@ export const ProfileForm = ({ profile, setProfile }: ProfileFormProps) => {
           ))}
         </div>
       </div>
-    </div>
+
+      <Button type="submit" className="w-full bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90">
+        Save Changes
+      </Button>
+    </form>
   );
 };
