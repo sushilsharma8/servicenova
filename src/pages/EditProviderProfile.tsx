@@ -66,8 +66,8 @@ const EditProviderProfile = () => {
   const initialProfile: ServiceProviderProfile = {
     business_name: profile.full_name,
     service_type: profile.service_type,
-    description: profile.description || "",
-    hourly_rate: profile.rate_agreed || 0,
+    description: "", // Removed as it's not in our schema
+    hourly_rate: 0, // Removed as it's not in our schema
     years_experience: profile.years_experience,
     certifications: profile.certifications || [],
   };

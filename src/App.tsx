@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "sonner";
+import { Toaster } from "sonner";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import ProviderApplication from "./pages/ProviderApplication";
 import EditProviderProfile from "./pages/EditProviderProfile";
@@ -11,7 +11,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <ToastContainer />
+        <Toaster />
         <Routes>
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
           <Route path="/provider/application" element={<ProviderApplication />} />
