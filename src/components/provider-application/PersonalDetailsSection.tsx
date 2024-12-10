@@ -6,7 +6,8 @@ interface PersonalDetailsSectionProps {
   fullName: string;
   address: string;
   age: string;
-  phoneNumber: string; // Added phone number prop
+  phoneNumber: string;
+  email: string; // Added email prop
   onChange: (field: string, value: string) => void;
 }
 
@@ -14,7 +15,8 @@ export const PersonalDetailsSection = ({
   fullName,
   address,
   age,
-  phoneNumber, // Added phone number prop
+  phoneNumber,
+  email, // Added email prop
   onChange,
 }: PersonalDetailsSectionProps) => {
   return (
@@ -52,11 +54,22 @@ export const PersonalDetailsSection = ({
       </div>
 
       <div>
-        <Label htmlFor="phoneNumber">Phone Number</Label> {/* New Phone Number Label */}
+        <Label htmlFor="phoneNumber">Phone Number</Label>
         <Input
           id="phoneNumber"
-          value={phoneNumber} // New Phone Number Input
-          onChange={(e) => onChange("phoneNumber", e.target.value)} // Handle change
+          value={phoneNumber}
+          onChange={(e) => onChange("phoneNumber", e.target.value)}
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => onChange("email", e.target.value)}
           required
         />
       </div>
