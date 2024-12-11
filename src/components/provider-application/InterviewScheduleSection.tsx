@@ -20,21 +20,24 @@ export const InterviewScheduleSection = ({ value, onChange }: InterviewScheduleS
   };
 
   return (
-    <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-lg">
+    <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-lg shadow-md">
       <CardHeader>
-        <CardTitle className="text-white">Schedule Interview</CardTitle>
+        <CardTitle className="text-2xl font-semibold text-white">Schedule Interview</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label className="text-white">Select Date and Time</Label>
-          <div className="flex flex-col space-y-4">
+      <CardContent className="space-y-6">
+        <div className="space-y-3">
+          <Label className="text-lg text-white">Select Date and Time</Label>
+          <div className="space-y-4">
+            {/* Calendar Styling */}
             <Calendar
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              className="rounded-md border border-white/10 bg-white/5 text-white"
+              className="rounded-md border border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-accent transition-all"
               disabled={(date) => date < new Date()}
             />
+            
+            {/* Time Input Styling */}
             <input
               type="time"
               value={value ? format(new Date(value), 'HH:mm') : ''}
@@ -46,7 +49,7 @@ export const InterviewScheduleSection = ({ value, onChange }: InterviewScheduleS
                   onChange(format(newDate, "yyyy-MM-dd'T'HH:mm"));
                 }
               }}
-              className="w-full rounded-md border border-white/10 bg-white/5 text-white px-3 py-2 focus:border-[#CCFF00] focus:ring-[#CCFF00]"
+              className="w-full rounded-md border border-white/10 bg-white/5 text-white px-4 py-2 focus:border-accent focus:ring-2 focus:ring-accent transition-all"
               required
             />
           </div>

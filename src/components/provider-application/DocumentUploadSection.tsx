@@ -13,25 +13,27 @@ export const DocumentUploadSection = ({ onFileChange }: DocumentUploadSectionPro
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <Label htmlFor="identityProof">Identity Proof (Aadhar/PAN)</Label>
+    <div className="space-y-6 animate-fade-in">
+      <div className="space-y-3">
+        <Label htmlFor="identityProof" className="text-lg">Identity Proof (Aadhar/PAN)</Label>
         <Input
           id="identityProof"
           type="file"
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => handleChange(e, 'identity')}
           required
+          className="bg-background/50 text-primary-foreground hover:bg-background/70 border-primary/20 focus:ring-2 focus:ring-accent transition-all"
         />
       </div>
 
-      <div>
-        <Label htmlFor="experienceProof">Experience Proof (Optional)</Label>
+      <div className="space-y-3">
+        <Label htmlFor="experienceProof" className="text-lg">Experience Proof (Optional)</Label>
         <Input
           id="experienceProof"
           type="file"
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={(e) => handleChange(e, 'experience')}
+          className="bg-background/50 text-primary-foreground hover:bg-background/70 border-primary/20 focus:ring-2 focus:ring-accent transition-all"
         />
       </div>
     </div>

@@ -110,7 +110,7 @@ const App = () => (
             }
           />
           <Route
-            path="/create-event"
+            path="/create/event"
             element={
               <ProtectedRoute>
                 <CreateEvent />

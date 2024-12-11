@@ -43,7 +43,7 @@ export default function Index() {
               <Button
                 size="lg"
                 className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-8 flex items-center neon-border transition-transform transform hover:-translate-y-1 hover:scale-104"
-                onClick={() => navigate("/create-event")}
+                onClick={() => navigate("/create/event")}
               >
                 I'm Hosting an Event
                 <CalendarCheck className="ml-2 h-5 w-5" />

@@ -23,15 +23,17 @@ interface ServiceCardProps {
 }
 
 const ServiceCard = ({ type, icon: Icon, isSelected, onClick }: ServiceCardProps) => (
-  <Card 
-    className={`cursor-pointer transition-all hover:border-accent ${
-      isSelected ? 'border-accent bg-card/50' : 'bg-card/30'
+  <Card
+    className={`cursor-pointer transition-all transform hover:scale-105 hover:shadow-xl rounded-lg border-2 border-transparent ${
+      isSelected
+        ? 'bg-accent/30 border-accent text-white'
+        : 'bg-card/30 border-transparent text-primary-foreground'
     }`}
     onClick={onClick}
   >
-    <CardContent className="p-3 flex flex-col items-center text-center space-x y-2">
-      <Icon className={`w-8 h-8 ${isSelected ? 'text-accent' : 'text-primary-foreground'}`} />
-      <h3 className="font-semibold text-lg">{type}</h3>
+    <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+      <Icon className={`w-12 h-12 ${isSelected ? 'text-white' : 'text-accent'}`} />
+      <h3 className="font-semibold text-xl">{type}</h3>
     </CardContent>
   </Card>
 );
@@ -63,13 +65,33 @@ export const ProfessionalDetailsSection = ({
     setCertificationsList(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Placeholder text based on the selected role
+  const getPlaceholder = (field: string) => {
+    switch (serviceType) {
+      case "bartender":
+        return field === "yearsExperience"
+          ? "How many years of cocktail mixing expertise do you have?"
+          : "List any bartending certifications you have (e.g., 'Certified Mixologist')";
+      case "chef":
+        return field === "yearsExperience"
+          ? "How many years have you been perfecting your culinary skills?"
+          : "Add your culinary certifications (e.g., 'Gordon Ramsay Certified')";
+      case "server":
+        return field === "yearsExperience"
+          ? "How many years of serving excellence do you bring to the table?"
+          : "Include any customer service certifications (e.g., 'Certified Hospitality Professional')";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <div className="space-y-3 animate-fade-in">
+    <div className="space-y-6 animate-fade-in">
       <CardHeader className="px-0">
         <CardTitle className="text-4xl font-bold text-center">Choose Your Role</CardTitle>
       </CardHeader>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <ServiceCard
           type="Bartender"
           icon={GlassWater}
@@ -91,6 +113,7 @@ export const ProfessionalDetailsSection = ({
       </div>
 
       <div className="space-y-6 bg-card/30 p-6 rounded-lg backdrop-blur-sm">
+        {/* Years of Experience */}
         <div className="space-y-4">
           <Label htmlFor="yearsExperience" className="text-lg mb-2 block">
             Years of Experience
@@ -104,12 +127,14 @@ export const ProfessionalDetailsSection = ({
             onChange={(e) => onChange("yearsExperience", e.target.value)}
             className="w-full"
             required
+            placeholder={getPlaceholder("yearsExperience")}
           />
         </div>
 
+        {/* Certifications */}
         <div className="space-y-4">
           <Label htmlFor="certifications" className="text-lg mb-2 block">
-            Certifications
+            Certifications (Optional)
           </Label>
           <div className="space-y-2">
             <Input
@@ -117,7 +142,7 @@ export const ProfessionalDetailsSection = ({
               value={certificationInput}
               onChange={(e) => setCertificationInput(e.target.value)}
               onKeyDown={handleAddCertification}
-              placeholder="Type certification and press Enter"
+              placeholder={getPlaceholder("certifications")}
               className="bg-background/50 border-primary/20"
             />
             <div className="flex flex-wrap gap-2 min-h-[2rem]">
