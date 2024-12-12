@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Review {
   id: string;
   rating: number;
-  comment: string;
+  comment: string | null;
   created_at: string;
   profiles: {
     full_name: string | null;
@@ -27,14 +27,17 @@ export default function Reviews() {
           rating,
           comment,
           created_at,
-          profiles:client_id (
+          profiles:profiles!client_id(
             full_name,
             avatar_url
           )
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching reviews:', error);
+        throw error;
+      }
       return data as Review[];
     },
   });
@@ -62,12 +65,12 @@ export default function Reviews() {
               <div className="flex items-center mb-4">
                 <Avatar className="h-10 w-10 mr-4">
                   <img 
-                    src={review.profiles.avatar_url || '/placeholder.svg'} 
-                    alt={review.profiles.full_name || 'User'}
+                    src={review.profiles?.avatar_url || '/placeholder.svg'} 
+                    alt={review.profiles?.full_name || 'User'}
                   />
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold">{review.profiles.full_name || 'Anonymous User'}</h3>
+                  <h3 className="font-semibold">{review.profiles?.full_name || 'Anonymous User'}</h3>
                   <div className="flex mt-1">
                     {renderStars(review.rating)}
                   </div>
