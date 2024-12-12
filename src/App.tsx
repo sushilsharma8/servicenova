@@ -17,6 +17,9 @@ import AdminReview from "./pages/AdminReview";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import AboutUs from "./pages/AboutUs";
+import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
 
@@ -79,9 +82,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Public landing page */}
+          {/* Public routes */}
           <Route path="/" element={<Index />} />
-
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/faq" element={<FAQ />} />
+          
           {/* Login route */}
           <Route
             path="/login"
