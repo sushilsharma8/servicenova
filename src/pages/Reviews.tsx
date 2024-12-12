@@ -13,7 +13,7 @@ interface Review {
   profiles: {
     full_name: string | null;
     avatar_url: string | null;
-  };
+  } | null;
 }
 
 export default function Reviews() {
@@ -27,18 +27,19 @@ export default function Reviews() {
           rating,
           comment,
           created_at,
-          profiles:profiles!client_id(
+          profiles:profiles!inner(
             full_name,
             avatar_url
           )
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .returns<Review[]>();
 
       if (error) {
         console.error('Error fetching reviews:', error);
         throw error;
       }
-      return data as Review[];
+      return data;
     },
   });
 
