@@ -11,8 +11,8 @@ interface Review {
   comment: string;
   created_at: string;
   profiles: {
-    full_name: string;
-    avatar_url: string;
+    full_name: string | null;
+    avatar_url: string | null;
   };
 }
 
@@ -23,7 +23,10 @@ export default function Reviews() {
       const { data, error } = await supabase
         .from('reviews')
         .select(`
-          *,
+          id,
+          rating,
+          comment,
+          created_at,
           profiles:client_id (
             full_name,
             avatar_url
@@ -58,10 +61,13 @@ export default function Reviews() {
             <Card key={review.id} className="p-6 bg-card">
               <div className="flex items-center mb-4">
                 <Avatar className="h-10 w-10 mr-4">
-                  <img src={review.profiles.avatar_url || '/placeholder.svg'} alt={review.profiles.full_name} />
+                  <img 
+                    src={review.profiles.avatar_url || '/placeholder.svg'} 
+                    alt={review.profiles.full_name || 'User'}
+                  />
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold">{review.profiles.full_name}</h3>
+                  <h3 className="font-semibold">{review.profiles.full_name || 'Anonymous User'}</h3>
                   <div className="flex mt-1">
                     {renderStars(review.rating)}
                   </div>
