@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Bell, Menu, X } from "lucide-react";
-import { useAuth } from "@/hooks/auth"; // Update path to match actual location
+import { useAuth } from "@/hooks/auth";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -29,29 +29,39 @@ export const Navbar = () => {
             className="text-xl font-bold text-white cursor-pointer"
             onClick={() => navigate("/")}
           >
-            F&B Connect
+            ServiceNova
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a 
-              href="#services" 
-              className="text-gray-300 hover:text-white transition-colors"
+            <Button
+              variant="ghost"
+              className="text-gray-300 hover:text-white"
+              onClick={() => navigate("/about")}
             >
-              Services
-            </a>
-            <a 
-              href="#how-it-works" 
-              className="text-gray-300 hover:text-white transition-colors"
+              About Us
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-gray-300 hover:text-white"
+              onClick={() => navigate("/reviews")}
             >
-              How it works
-            </a>
-            <a 
-              href="#faq" 
-              className="text-gray-300 hover:text-white transition-colors"
+              Reviews
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-gray-300 hover:text-white"
+              onClick={() => navigate("/blog")}
+            >
+              Blog
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-gray-300 hover:text-white"
+              onClick={() => navigate("/faq")}
             >
               FAQ
-            </a>
+            </Button>
           </div>
 
           {/* Desktop Auth Buttons */}
@@ -86,13 +96,13 @@ export const Navbar = () => {
                 <Button
                   variant="ghost"
                   className="text-gray-300 hover:text-white"
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/login")}
                 >
                   Sign In
                 </Button>
                 <Button
                   className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90"
-                  onClick={() => navigate("/auth?mode=signup")}
+                  onClick={() => navigate("/login")}
                 >
                   Get Started
                 </Button>
@@ -117,24 +127,34 @@ export const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-black/95 backdrop-blur-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <a
-                href="#services"
-                className="block px-3 py-2 text-gray-300 hover:text-white"
+              <Button
+                variant="ghost"
+                className="w-full text-left text-gray-300 hover:text-white"
+                onClick={() => navigate("/about")}
               >
-                Services
-              </a>
-              <a
-                href="#how-it-works"
-                className="block px-3 py-2 text-gray-300 hover:text-white"
+                About Us
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left text-gray-300 hover:text-white"
+                onClick={() => navigate("/reviews")}
               >
-                How it works
-              </a>
-              <a
-                href="#faq"
-                className="block px-3 py-2 text-gray-300 hover:text-white"
+                Reviews
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left text-gray-300 hover:text-white"
+                onClick={() => navigate("/blog")}
+              >
+                Blog
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full text-left text-gray-300 hover:text-white"
+                onClick={() => navigate("/faq")}
               >
                 FAQ
-              </a>
+              </Button>
               {user ? (
                 <>
                   <Button
@@ -157,13 +177,13 @@ export const Navbar = () => {
                   <Button
                     variant="ghost"
                     className="w-full text-gray-300 hover:text-white"
-                    onClick={() => navigate("/auth")}
+                    onClick={() => navigate("/login")}
                   >
                     Sign In
                   </Button>
                   <Button
                     className="w-full bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90"
-                    onClick={() => navigate("/auth?mode=signup")}
+                    onClick={() => navigate("/login")}
                   >
                     Get Started
                   </Button>
@@ -175,4 +195,4 @@ export const Navbar = () => {
       </div>
     </nav>
   );
-}; 
+};
