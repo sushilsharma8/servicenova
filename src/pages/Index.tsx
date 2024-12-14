@@ -2,12 +2,15 @@ import { Button } from "@/components/ui/button";
 import { CalendarCheck, Users, CheckCircle, Star, ChefHat, Calendar, ArrowRight , PhoneCall, UserRoundSearch} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { testimonials } from "@/data/testimonials";
+import { Navbar } from "@/components/Navbar";
+
 
 export default function Index() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-dark-bg text-white">
+        <Navbar /> 
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center pt-12 md:pt-0">
         <div className="absolute inset-0 z-0">

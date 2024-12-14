@@ -69,7 +69,7 @@ export default function AboutUs() {
           </div>
         </div>
 
-        {/* Team Section */}
+        {/* Team Section
         <div>
           <h2 className="text-2xl font-bold text-center mb-8">Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -103,7 +103,7 @@ export default function AboutUs() {
               </Card>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
