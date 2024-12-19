@@ -50,7 +50,7 @@ const AuthForm = () => {
               label: 'text-foreground',
             },
           }}
-          providers={["google"]}
+          providers={["google", "github"]} // Added GitHub as a provider
         />
       </div>
     </div>
