@@ -19,9 +19,7 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-transparent"
-    }`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -34,92 +32,34 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Button
-              variant="ghost"
-              className="text-gray-300 hover:text-white"
-              onClick={() => navigate("/about")}
-            >
-              About Us
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-gray-300 hover:text-white"
-              onClick={() => navigate("/reviews")}
-            >
-              Reviews
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-gray-300 hover:text-white"
-              onClick={() => navigate("/blog")}
-            >
-              Blog
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-gray-300 hover:text-white"
-              onClick={() => navigate("/faq")}
-            >
-              FAQ
-            </Button>
+            <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/about")}>About Us</Button>
+            <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/reviews")}>Reviews</Button>
+            <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/blog")}>Blog</Button>
+            <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/faq")}>FAQ</Button>
+            <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/privacy")}>Privacy</Button> {/* Added Privacy link */}
           </div>
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-300 hover:text-white"
-                  onClick={() => navigate("/notifications")}
-                >
+                <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white" onClick={() => navigate("/notifications")}>
                   <Bell className="h-5 w-5" />
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10"
-                  onClick={() => navigate("/dashboard")}
-                >
-                  Dashboard
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="text-gray-300 hover:text-white"
-                  onClick={signOut}
-                >
-                  Sign Out
-                </Button>
+                <Button variant="outline" className="border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10" onClick={() => navigate("/dashboard")}>Dashboard</Button>
+                <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={signOut}>Sign Out</Button>
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  className="text-gray-300 hover:text-white"
-                  onClick={() => navigate("/login")}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90"
-                  onClick={() => navigate("/login")}
-                >
-                  Get Started
-                </Button>
+                <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/login")}>Sign In</Button>
+                <Button className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90" onClick={() => navigate("/login")}>Get Started</Button>
               </>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-300 hover:text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+          <button className="md:hidden text-gray-300 hover:text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
@@ -127,66 +67,20 @@ export const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-black/95 backdrop-blur-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Button
-                variant="ghost"
-                className="w-full text-left text-gray-300 hover:text-white"
-                onClick={() => navigate("/about")}
-              >
-                About Us
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full text-left text-gray-300 hover:text-white"
-                onClick={() => navigate("/reviews")}
-              >
-                Reviews
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full text-left text-gray-300 hover:text-white"
-                onClick={() => navigate("/blog")}
-              >
-                Blog
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full text-left text-gray-300 hover:text-white"
-                onClick={() => navigate("/faq")}
-              >
-                FAQ
-              </Button>
+              <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white" onClick={() => navigate("/about")}>About Us</Button>
+              <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white" onClick={() => navigate("/reviews")}>Reviews</Button>
+              <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white" onClick={() => navigate("/blog")}>Blog</Button>
+              <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white" onClick={() => navigate("/faq")}>FAQ</Button>
+              <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white" onClick={() => navigate("/privacy")}>Privacy</Button> {/* Added Privacy link */}
               {user ? (
                 <>
-                  <Button
-                    variant="outline"
-                    className="w-full border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10"
-                    onClick={() => navigate("/dashboard")}
-                  >
-                    Dashboard
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-gray-300 hover:text-white"
-                    onClick={signOut}
-                  >
-                    Sign Out
-                  </Button>
+                  <Button variant="outline" className="w-full border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00]/10" onClick={() => navigate("/dashboard")}>Dashboard</Button>
+                  <Button variant="ghost" className="w-full text-gray-300 hover:text-white" onClick={signOut}>Sign Out</Button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-gray-300 hover:text-white"
-                    onClick={() => navigate("/login")}
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    className="w-full bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90"
-                    onClick={() => navigate("/login")}
-                  >
-                    Get Started
-                  </Button>
+                  <Button variant="ghost" className="w-full text-gray-300 hover:text-white" onClick={() => navigate("/login")}>Sign In</Button>
+                  <Button className="w-full bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90" onClick={() => navigate("/login")}>Get Started</Button>
                 </>
               )}
             </div>
