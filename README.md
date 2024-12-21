@@ -6,7 +6,7 @@ ServiceNova is a platform designed to connect event hosts and hotel service prov
 This repository is primarily written in **TypeScript**.
 
 ## How to Access
-Access the platform by visiting the [ServiceNova website](https://github.com/sushilsharma8/servicenova).
+Access the platform by visiting the [ServiceNova website](https://servicenova-six.vercel.app).
 
 ## Installation
 Follow the steps below to run the project locally:
