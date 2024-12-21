@@ -1,41 +1,52 @@
-ServiceNova
+# ServiceNova
+
 ServiceNova is a platform designed to connect event hosts and hotel service providers in the Food & Beverage industry.
 
-Project Information
-This repository is primarily written in TypeScript.
+## Project Information
+This repository is primarily written in **TypeScript**.
 
-How to Access
-You can access the platform by visiting the ServiceNova website.
+## How to Access
+Access the platform by visiting the [ServiceNova website](https://github.com/sushilsharma8/servicenova).
 
-Installation
-To run this project locally, follow these steps:
+## Installation
+Follow the steps below to run the project locally:
 
-Clone the repository:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/sushilsharma8/servicenova.git
+   cd servicenova
+   ```
 
-bash
-git clone https://github.com/sushilsharma8/servicenova.git
-cd servicenova
-Install dependencies:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-npm install
-Start the development server:
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-npm run dev
+## Technologies Used
+This project is built using the following technologies:
 
+- **[Vite](https://vitejs.dev/):** A fast build tool for modern web applications.
+- **[TypeScript](https://www.typescriptlang.org/):** A strongly typed programming language for JavaScript.
+- **[React](https://react.dev/):** A JavaScript library for building user interfaces.
+- **[shadcn-ui](https://shadcn.dev/):** A modern UI component library.
+- **[Tailwind CSS](https://tailwindcss.com/):** A utility-first CSS framework for styling.
 
-## What technologies are used for this project?
+## Contributing
+We welcome contributions! If you'd like to contribute:
 
-This project is built with .
+1. Fork the repository.
+2. Make your changes.
+3. Submit a pull request.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Please ensure your code follows the established guidelines and is well-documented.
 
-Contributing
-We welcome contributions! If you would like to contribute, please fork the repository and submit a pull request.
+## License
+This project is licensed under the [MIT License](LICENSE).
 
-License
-This project is licensed under the MIT License.
-
+---
+Feel free to reach out to the maintainers for further questions or support!
