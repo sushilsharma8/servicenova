@@ -14,6 +14,8 @@ import { MetricsCards } from "@/components/admin/MetricsCards";
 import { RevenueChart } from "@/components/admin/RevenueChart";
 import { ServiceRequestsTable } from "@/components/admin/ServiceRequestsTable";
 import { DisputesTable } from "@/components/admin/DisputesTable";
+import { Calendar, CheckCircle, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function AdminDashboard() {
   const [selectedDispute, setSelectedDispute] = useState<string | null>(null);
@@ -21,7 +23,6 @@ export default function AdminDashboard() {
   const { data: metrics } = useQuery({
     queryKey: ["admin-metrics"],
     queryFn: async () => {
-      // Get total events
       const { data: events, error: eventsError } = await supabase
         .from("events")
         .select("*");
@@ -30,7 +31,6 @@ export default function AdminDashboard() {
         console.error("Events error:", eventsError);
       }
 
-      // Get approved provider applications
       const { data: providers, error: providersError } = await supabase
         .from("provider_applications")
         .select("*")
@@ -40,15 +40,6 @@ export default function AdminDashboard() {
         console.error("Providers error:", providersError);
       }
 
-      // Log all provider applications to see their status
-      const { data: allProviders } = await supabase
-        .from("provider_applications")
-        .select("*");
-      
-      console.log("All provider applications:", allProviders);
-      console.log("Approved provider applications:", providers);
-
-      // Get service requests
       const { data: requests, error: requestsError } = await supabase
         .from("event_service_requests")
         .select("*");
@@ -78,7 +69,6 @@ export default function AdminDashboard() {
 
       const monthlyRevenue = data.reduce((acc: Record<string, number>, curr) => {
         const month = new Date(curr.created_at).toLocaleString('default', { month: 'short' });
-        // Ensure rate_agreed is treated as a number
         const amount = typeof curr.rate_agreed === 'string' 
           ? parseFloat(curr.rate_agreed) 
           : Number(curr.rate_agreed) || 0;
@@ -89,7 +79,7 @@ export default function AdminDashboard() {
 
       return Object.entries(monthlyRevenue).map(([month, amount]) => ({
         month,
-        amount: Number(amount), // Ensure amount is explicitly typed as number
+        amount: Number(amount),
       }));
     },
   });
@@ -134,52 +124,68 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+    <div className="min-h-screen bg-dark-bg text-white">
+      <div className="container mx-auto p-6 space-y-6">
+        <h1 className="text-3xl font-semibold mb-6 neon-gradient">Admin Dashboard</h1>
 
-      {metrics && <MetricsCards metrics={metrics} />}
+        {metrics && <MetricsCards metrics={metrics} />}
 
-      <Tabs defaultValue="analytics" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="requests">Requests</TabsTrigger>
-          <TabsTrigger value="disputes">Disputes</TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="analytics" className="space-y-4">
+          <TabsList className="flex justify-center gap-4">
+            <TabsTrigger value="analytics" className="bg-gradient-to-r from-neon-green to-teal-500 text-white rounded-lg p-2">
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="requests" className="bg-gradient-to-r from-neon-green to-teal-500 text-white rounded-lg p-2">
+              Requests
+            </TabsTrigger>
+            <TabsTrigger value="disputes" className="bg-gradient-to-r from-neon-green to-teal-500 text-white rounded-lg p-2">
+              Disputes
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="analytics">
-          {revenueData && <RevenueChart data={revenueData} />}
-        </TabsContent>
+          <TabsContent value="analytics" className="space-y-4 bg-gradient-to-b from-[#111] to-dark-bg p-4 rounded-lg shadow-lg">
+            {revenueData && <RevenueChart data={revenueData} />}
+          </TabsContent>
 
-        <TabsContent value="requests">
-          <Card>
-            <CardHeader>
-              <CardTitle>Service Requests</CardTitle>
-              <CardDescription>Manage all service requests</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {requests && <ServiceRequestsTable requests={requests} />}
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <TabsContent value="requests" className="space-y-4 bg-gradient-to-b from-[#111] to-dark-bg p-4 rounded-lg shadow-lg">
+            <Card className="bg-gradient-to-b from-[#0A0A0A] to-[#111] p-6 rounded-xl shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-white font-semibold">Service Requests</CardTitle>
+                <CardDescription className="text-gray-400">Manage all service requests</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {requests && <ServiceRequestsTable requests={requests} />}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="disputes">
-          <Card>
-            <CardHeader>
-              <CardTitle>Dispute Management</CardTitle>
-              <CardDescription>Handle customer disputes and refunds</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {requests && (
-                <DisputesTable
-                  disputes={requests.filter(r => r.status === 'pending')}
-                  onResolve={(id) => handleDisputeResolution(id, 'completed')}
-                  onRefund={(id) => handleDisputeResolution(id, 'cancelled')}
-                />
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="disputes" className="space-y-4 bg-gradient-to-b from-[#111] to-dark-bg p-4 rounded-lg shadow-lg">
+            <Card className="bg-gradient-to-b from-[#0A0A0A] to-[#111] p-6 rounded-xl shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-white font-semibold">Dispute Management</CardTitle>
+                <CardDescription className="text-gray-400">Handle customer disputes and refunds</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {requests && (
+                  <DisputesTable
+                    disputes={requests.filter(r => r.status === 'pending')}
+                    onResolve={(id) => handleDisputeResolution(id, 'completed')}
+                    onRefund={(id) => handleDisputeResolution(id, 'cancelled')}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        <Button 
+          className="bg-neon-green text-black hover:bg-neon-green/90 text-lg px-6 py-2 rounded-full shadow-lg mt-4 transition-transform transform hover:scale-105"
+          onClick={() => refetchRequests()}
+        >
+          Refetch Data
+          <CheckCircle className="ml-2 h-5 w-5" />
+        </Button>
+      </div>
     </div>
   );
 }
