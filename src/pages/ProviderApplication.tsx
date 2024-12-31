@@ -92,6 +92,7 @@ const ProviderApplication = () => {
         identity_proof_url: identityProofUrl,
         experience_proof_url: experienceProofUrl,
         preferred_interview_date: formData.preferredInterviewDate,
+        status: 'pending', // Set status as pending initially
         user_id: user.id
       });
 

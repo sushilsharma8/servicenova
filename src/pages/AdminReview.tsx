@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+
 import {
   Table,
   TableBody,
@@ -11,10 +12,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Database } from "@/integrations/supabase/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type ProviderApplication = Database["public"]["Tables"]["provider_applications"]["Row"];
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, FileText, CalendarDays } from "lucide-react";
 
 const AdminReview = () => {
   const { data: applications, isLoading, refetch } = useQuery({
@@ -26,173 +26,247 @@ const AdminReview = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data as ProviderApplication[];
+      return data;
     },
   });
 
-  const handleUpdateStatus = async (
-    applicationId: string,
-    newStatus: Database["public"]["Enums"]["provider_application_status"],
-    interviewLink?: string
-  ) => {
+  const handleUpdateStatus = async (applicationId, newStatus) => {
     try {
-      // Log the current user session
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log("Current session:", session);
+      const { error } = await supabase
+        .from("provider_applications")
+        .update({ status: newStatus })
+        .eq("id", applicationId);
 
-      // Generate a Google Meet link (in a real application, this would integrate with Google Calendar API)
-      const meetLink = "https://meet.google.com/" + Math.random().toString(36).substring(2, 15);
+      if (error) throw error;
 
-      // First fetch the application to check its current status
+      toast.success(`Application ${newStatus} successfully!`);
+      refetch(); // Refresh data
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update status. Please try again.");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-black to-gray-900">
+        <div className="loader border-t-transparent border-4 border-[#CCFF00] w-8 h-8 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const pendingApplications = applications?.filter(
+    (app) => app.status === "pending"
+  );
+  const reviewedApplications = applications?.filter(
+    (app) => app.status === "approved" || app.status === "rejected"
+  );
+  
+  // Function to handle status update and scheduling the interview
+  const handleScheduleInterview = async (applicationId) => {
+    try {
+      // Fetch the current application data
       const { data: application, error: fetchError } = await supabase
         .from("provider_applications")
         .select("*")
         .eq("id", applicationId)
         .single();
-
-      console.log("Current application data:", application);
-
-      if (fetchError) {
-        console.error("Error fetching application:", fetchError);
-        throw fetchError;
-      }
-
-      // Update the application status
-      const { data: updateData, error: updateError } = await supabase
+  
+      if (fetchError) throw fetchError;
+  
+      // Generate a Google Meet link (simulated)
+      const meetLink = "https://meet.google.com/" + Math.random().toString(36).substring(2, 15);
+  
+      // Update application status to "interview_scheduled" and add the meet link
+      const { error: updateError } = await supabase
         .from("provider_applications")
-        .update({
-          status: newStatus,
-          interview_link: meetLink,
-        })
-        .eq("id", applicationId)
-        .select()
-        .single();
-
-      console.log("Update response:", { data: updateData, error: updateError });
-
+        .update({ status: "interview_scheduled", interview_link: meetLink })
+        .eq("id", applicationId);
+  
       if (updateError) throw updateError;
-
-      if (newStatus === "interview_scheduled") {
-        // Send interview notification email
-        const { error: emailError } = await supabase.functions.invoke("send-interview-email", {
-          body: {
-            to: application.email || "applicant@example.com",
-            applicantName: application.full_name,
-            interviewDate: application.preferred_interview_date,
-            meetingLink: meetLink,
-          },
-        });
-
-        if (emailError) {
-          console.error("Error sending email:", emailError);
-          toast.error("Interview scheduled but failed to send email notification");
-        } else {
-          toast.success("Interview scheduled and email notification sent");
-        }
+  
+      // Send interview email notification with Google Meet link
+      const { error: emailError } = await supabase.functions.invoke("send-interview-email", {
+        body: {
+          to: application.email || "applicant@example.com",
+          applicantName: application.full_name,
+          interviewDate: application.preferred_interview_date, // Or any date field you want
+          meetingLink: meetLink, // The Google Meet link generated above
+        },
+      });
+  
+      if (emailError) {
+        console.error("Error sending email:", emailError);
+        toast.error("Interview scheduled but failed to send email notification");
       } else {
-        toast.success(`Application ${newStatus} successfully`);
+        toast.success("Interview scheduled and email notification sent");
       }
-
+  
+      // Refresh the applications data
       refetch();
+  
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to update application status");
+      console.error("Error scheduling interview:", error);
+      toast.error("Failed to schedule interview. Please try again.");
     }
   };
-
-  if (isLoading) return <div>Loading...</div>;
+  
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold mb-6">Provider Applications Review</h1>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Applications</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Service Type</TableHead>
-                <TableHead>Experience</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Documents</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {applications?.map((application) => (
-                <TableRow key={application.id}>
-                  <TableCell>{application.full_name}</TableCell>
-                  <TableCell>{application.service_type}</TableCell>
-                  <TableCell>{application.years_experience} years</TableCell>
-                  <TableCell>
-                    <Badge variant={application.status === "pending" ? "secondary" : 
-                                application.status === "approved" ? "outline" : 
-                                application.status === "rejected" ? "destructive" : 
-                                "default"}>
-                      {application.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {application.identity_proof_url && (
+    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900">
+      <div className="container mx-auto px-6 py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold text-white">Provider Applications</h1>
+          <p className="text-gray-400 text-lg mt-2">
+            Review and manage applications efficiently.
+          </p>
+        </div>
+
+        {/* Pending Applications */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg mb-8">
+          <CardHeader className="bg-white/10 border-b border-white/10 px-6 py-4">
+            <CardTitle className="text-xl text-white">Pending Applications</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table className="w-full text-white">
+              <TableHeader>
+                <TableRow className="bg-white/10">
+                  <TableHead className="px-4 py-2">Name</TableHead>
+                  <TableHead className="px-4 py-2">Service Type</TableHead>
+                  <TableHead className="px-4 py-2">Experience</TableHead>
+                  <TableHead className="px-4 py-2">Documents</TableHead>
+                  <TableHead className="px-4 py-2">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pendingApplications.map((application) => (
+                  <TableRow key={application.id} className="hover:bg-white/10 transition">
+                    <TableCell className="px-4 py-2">{application.full_name}</TableCell>
+                    <TableCell className="px-4 py-2">{application.service_type}</TableCell>
+                    <TableCell className="px-4 py-2">
+                      {application.years_experience} years
+                    </TableCell>
+                    <TableCell className="px-4 py-2">
                       <a
-                        href={`${supabase.storage.from('provider_documents').getPublicUrl(application.identity_proof_url).data.publicUrl}`}
+                        href={application.identity_proof_url || "#"}
+                        className="text-[#CCFF00] hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline mr-2"
                       >
-                        ID Proof
+                        <FileText className="inline w-4 h-4 mr-1" /> ID Proof
                       </a>
-                    )}
-                    {application.experience_proof_url && (
-                      <a
-                        href={`${supabase.storage.from('provider_documents').getPublicUrl(application.experience_proof_url).data.publicUrl}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
-                      >
-                        Experience Proof
-                      </a>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-x-2">
-                      {application.status === "pending" && (
+                      {application.experience_proof_url && (
                         <>
-                          <Button
-                            size="sm"
-                            onClick={() => handleUpdateStatus(application.id, "interview_scheduled")}
+                          <br />
+                          <a
+                            href={application.experience_proof_url}
+                            className="text-[#CCFF00] hover:underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
                           >
-                            Schedule Interview
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleUpdateStatus(application.id, "rejected")}
-                          >
-                            Reject
-                          </Button>
+                            <FileText className="inline w-4 h-4 mr-1" /> Experience Proof
+                          </a>
                         </>
                       )}
-                      {application.status === "interview_scheduled" && (
+                    </TableCell>
+                    <TableCell className="px-4 py-2">
+                      <div className="flex flex-col space-y-3">
                         <Button
                           size="sm"
+                          className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90"
                           onClick={() => handleUpdateStatus(application.id, "approved")}
                         >
+                          <CheckCircle className="w-4 h-4 mr-1" />
                           Approve
                         </Button>
-                      )}
-                    </div>
-                  </TableCell>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleUpdateStatus(application.id, "rejected")}
+                        >
+                          Reject
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleScheduleInterview(application.id)}
+                        >
+                          <CalendarDays className="w-4 h-4 mr-1" />
+                          Schedule Interview
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        {/* Reviewed Applications */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg shadow-md">
+          <CardHeader className="bg-white/10 border-b border-white/10 px-6 py-4">
+            <CardTitle className="text-xl text-white">Reviewed Applications</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table className="w-full text-white">
+              <TableHeader>
+                <TableRow className="bg-white/10">
+                  <TableHead className="px-4 py-2">Name</TableHead>
+                  <TableHead className="px-4 py-2">Service Type</TableHead>
+                  <TableHead className="px-4 py-2">Experience</TableHead>
+                  <TableHead className="px-4 py-2">Status</TableHead>
+                  <TableHead className="px-4 py-2">Documents</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {reviewedApplications.map((application) => (
+                  <TableRow key={application.id} className="hover:bg-white/10 transition">
+                    <TableCell className="px-4 py-2">{application.full_name}</TableCell>
+                    <TableCell className="px-4 py-2">{application.service_type}</TableCell>
+                    <TableCell className="px-4 py-2">
+                      {application.years_experience} years
+                    </TableCell>
+                    <TableCell className="px-4 py-2">
+                      <Badge
+                        variant={
+                          application.status === "approved" ? "default" : "destructive"
+                        }
+                        className="text-sm px-2 py-1"
+                      >
+                        {application.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-4 py-2">
+                      <a
+                        href={application.identity_proof_url || "#"}
+                        className="text-[#CCFF00] hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FileText className="inline w-4 h-4 mr-1" /> ID Proof
+                      </a>
+                      {application.experience_proof_url && (
+                        <>
+                          <br />
+                          <a
+                            href={application.experience_proof_url}
+                            className="text-[#CCFF00] hover:underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FileText className="inline w-4 h-4 mr-1" /> Experience Proof
+                          </a>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

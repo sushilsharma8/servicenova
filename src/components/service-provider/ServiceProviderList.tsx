@@ -36,19 +36,24 @@ export const ServiceProviderList = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500" role="status"></div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Available Service Providers</h2>
+      {/* Header Section */}
+      <div className="bg-blue-50 p-6 rounded-md shadow-md flex justify-between items-center">
+        <h2 className="text-3xl font-bold text-gray-800">Service Providers</h2>
         <Select
           value={selectedType || ""}
           onValueChange={(value) => setSelectedType(value || null)}
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by type" />
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Filter by Type" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All Types</SelectItem>
@@ -59,27 +64,34 @@ export const ServiceProviderList = () => {
         </Select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Providers Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {providers?.map((provider) => (
-          <Card key={provider.id}>
+          <Card
+            key={provider.id}
+            className="hover:shadow-lg transition-shadow duration-300 rounded-lg"
+          >
             <CardHeader>
-              <CardTitle>{provider.full_name}</CardTitle>
+              <CardTitle className="text-xl font-semibold text-gray-800">
+                {provider.full_name}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <p className="text-sm text-gray-600">
-                  Service: {provider.service_type}
+                  <strong>Service:</strong> {provider.service_type}
                 </p>
                 <p className="text-sm text-gray-600">
-                  Experience: {provider.years_experience} years
+                  <strong>Experience:</strong> {provider.years_experience} years
                 </p>
                 {provider.certifications && provider.certifications.length > 0 && (
                   <p className="text-sm text-gray-600">
-                    Certifications: {provider.certifications.join(", ")}
+                    <strong>Certifications:</strong>{" "}
+                    {provider.certifications.join(", ")}
                   </p>
                 )}
                 <Button
-                  className="w-full mt-4"
+                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white"
                   onClick={() => {
                     // TODO: Implement request service functionality
                   }}
