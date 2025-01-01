@@ -11,8 +11,8 @@ const Contact = () => {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => navigate('/')} />
         
-        <div className="relative w-full max-w-md">
-          <Card className="bg-[#0A0A0A] shadow-xl ring-1 ring-white/5 p-8 rounded-3xl border-[1px]">
+          <div className="relative w-full max-w-sm md:max-w-md">
+            <Card className="bg-[#0A0A0A] shadow-xl ring-1 ring-white/5 p-6 md:p-8 rounded-3xl border-[1px]">
             <button
               onClick={() => navigate('/')}
               className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
@@ -22,7 +22,7 @@ const Contact = () => {
 
             <div className="space-y-6">
               <div className="text-center">
-                <h2 className="text-2xl font-semibold text-white">
+                <h2 className="text-xl md:text-2xl font-semibold text-white">
                   Request a Call Back
                 </h2>
                 <p className="mt-2 text-gray-400">
@@ -38,4 +38,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;
