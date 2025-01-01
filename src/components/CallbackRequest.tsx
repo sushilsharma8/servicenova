@@ -71,7 +71,7 @@ export const CallbackRequest = () => {
     );
   }
 
-  const inputClassName = "mt-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#CCFF00] focus:ring-[#CCFF00]";
+  const inputClassName = "mt-1 bg-white/5 border-white/5 text-white placeholder:text-gray-400 focus:border-[#CCFF00] focus:ring-[#CCFF00]";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

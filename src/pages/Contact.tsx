@@ -12,12 +12,12 @@ const Contact = () => {
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => navigate('/')} />
         
         <div className="relative w-full max-w-md">
-          <Card className="bg-[#0A0A0A] shadow-xl ring-1 ring-white/10 p-8">
+          <Card className="bg-[#0A0A0A] shadow-xl ring-1 ring-white/5 p-8 rounded-3xl border-[1px]">
             <button
               onClick={() => navigate('/')}
               className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5" /> 
             </button>
 
             <div className="space-y-6">

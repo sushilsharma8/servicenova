@@ -51,8 +51,6 @@ export const Navbar = () => {
               </>
             ) : (
               <>
-                <Button variant="ghost" className="text-gray-300 hover:text-white" onClick={() => navigate("/login")}>Sign In</Button>
-                <Button className="bg-[#CCFF00] text-black hover:bg-[#CCFF00]/90" onClick={() => navigate("/login")}>Get Started</Button>
               </>
             )}
           </div>
