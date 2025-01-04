@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, Calendar, Users, UserRound, Home } from "lucide-react";
 
+const isAdmin = (email: string) => {
+  return email === "sushilsharma8oct2001@gmail.com";
+};
+
 export const Navigation = () => {
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<'admin' | 'provider' | 'client' | null>(null);
@@ -38,6 +42,12 @@ export const Navigation = () => {
   };
 
   const handleLogout = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && isAdmin(user.email)) {
+      // Perform admin-specific actions
+    } else {
+      // Perform non-admin actions
+    }
     await supabase.auth.signOut();
     navigate("/login");
   };
@@ -76,45 +86,6 @@ export const Navigation = () => {
                   >
                     <Users className="mr-2 h-4 w-4" />
                     Provider Applications
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </>
-            )}
-
-            {/* Provider Navigation */}
-            {userRole === 'provider' && (
-              <>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                    onClick={() => navigate("/provider/dashboard")}
-                  >
-                    <UserRound className="mr-2 h-4 w-4" />
-                    Provider Dashboard
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </>
-            )}
-
-            {/* Client Navigation */}
-            {(userRole === 'client' || !userRole) && (
-              <>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                    onClick={() => navigate("/create/event")}
-                  >
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Create Event
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                    onClick={() => navigate("/provider/application")}
-                  >
-                    <UserRound className="mr-2 h-4 w-4" />
-                    Become a Provider
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </>

@@ -26,8 +26,9 @@ import Reviews from "./pages/Reviews";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children, role }: { children: React.ReactNode, role?: string }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -35,13 +36,44 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setIsAuthenticated(!!session);
+      if (session) {
+        checkUserRole();
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  if (isAuthenticated === null) {
+  const checkUserRole = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: providers } = await supabase
+        .from('provider_applications')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'approved');
+
+      if (providers && providers.length > 0) {
+        setUserRole('provider');
+        return;
+      }
+
+      setUserRole('admin');
+      
+    } catch (error) {
+      console.error('Error checking user role:', error);
+      setUserRole('client');
+    }
+  };
+
+  if (isAuthenticated === null || (role && userRole === null)) {
     return <div>Loading...</div>;
+  }
+
+  if (role && userRole !== role) {
+    return <Navigate to="/" replace />;
   }
 
   return isAuthenticated ? (
@@ -156,7 +188,7 @@ const App = () => (
           <Route
             path="/admin/applications"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminReview />
               </ProtectedRoute>
             }
@@ -172,7 +204,7 @@ const App = () => (
           <Route
             path="/admin/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminDashboard />
               </ProtectedRoute>
             }
