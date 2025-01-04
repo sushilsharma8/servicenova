@@ -13,14 +13,17 @@ export const Navigation = () => {
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<'admin' | 'provider' | 'client' | null>(null);
 
-  useEffect(() => {
-    checkUserRole();
-  }, []);
+const [adminemail, setadminemail] = useState("")
+  
 
   const checkUserRole = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
+      console.log("fetching user role", user);
+      console.log("fetching user role email", user?.email);
+      setadminemail(user?.email);
       if (!user) return;
+
 
       const { data: providers } = await supabase
         .from('provider_applications')
@@ -28,6 +31,8 @@ export const Navigation = () => {
         .eq('user_id', user.id)
         .eq('status', 'approved');
 
+
+        console.log("providers", providers);
       if (providers && providers.length > 0) {
         setUserRole('provider');
         return;
@@ -41,9 +46,19 @@ export const Navigation = () => {
     }
   };
 
+
+  useEffect(() => {
+    checkUserRole();
+
+    console.log("adminemail", adminemail);
+    console.log("userrole", userRole);
+  }, [userRole , adminemail]);
+
   const handleLogout = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user && isAdmin(user.email)) {
+
+      console.log("result of and" , user && isAdmin(user.email))
       // Perform admin-specific actions
     } else {
       // Perform non-admin actions
@@ -68,7 +83,7 @@ export const Navigation = () => {
             </NavigationMenuItem>
 
             {/* Admin Navigation */}
-            {userRole === 'admin' && (
+            {adminemail === 'sushilsharma8oct2001@gmail.com' && (
               <>
                 <NavigationMenuItem>
                   <NavigationMenuLink
