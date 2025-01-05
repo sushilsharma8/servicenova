@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {

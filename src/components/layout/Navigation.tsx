@@ -19,7 +19,6 @@ const [adminemail, setadminemail] = useState("")
   const checkUserRole = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      console.log("fetching user role", user);
       console.log("fetching user role email", user?.email);
       setadminemail(user?.email);
       if (!user) return;
@@ -81,6 +80,19 @@ const [adminemail, setadminemail] = useState("")
                 Home
               </NavigationMenuLink>
             </NavigationMenuItem>
+            
+            {/* Provider Navigation */}
+            {userRole === 'provider' && (
+              <NavigationMenuItem>
+              <NavigationMenuLink
+                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                onClick={() => navigate("/provider/dashboard")}
+              >
+                <UserRound className="mr-2 h-4 w-4" />
+                Provider Profile
+              </NavigationMenuLink>
+              </NavigationMenuItem>
+            )}
 
             {/* Admin Navigation */}
             {adminemail === 'sushilsharma8oct2001@gmail.com' && (
