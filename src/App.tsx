@@ -136,15 +136,7 @@ const App = () => (
             }
           />
 
-          {/* Protected routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Index />
-              </ProtectedRoute>
-            }
-          />
+          {/* Protected routes */}     
           <Route
             path="/success"
             element={
