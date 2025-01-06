@@ -47,11 +47,11 @@ const handler = async (req: Request): Promise<Response> => {
     })
 
     const emailHtml = `
-      <h2>Interview Scheduled - Eventful Bites Connect</h2>
+      <h2>Interview Scheduled - ServiceNova</h2>
       <p>Dear ${applicantName},</p>
       <p>Your interview has been scheduled for ${formattedDate}.</p>
       <p>Please join the interview using this link: <a href="${meetingLink}">${meetingLink}</a></p>
-      <p>Best regards,<br>Eventful Bites Connect Team</p>
+      <p>Best regards,<br>ServiceNova Team</p>
     `
 
     const res = await fetch('https://api.resend.com/emails', {
@@ -61,9 +61,9 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Eventful Bites Connect <onboarding@resend.dev>',
+        from: 'ServiceNova <sushilsharma8oct2001@gmail.com>',
         to: [to],
-        subject: 'Interview Scheduled - Eventful Bites Connect',
+        subject: 'Interview Scheduled - ServiceNova',
         html: emailHtml,
       }),
     })
